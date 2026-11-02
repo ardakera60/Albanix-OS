@@ -1,0 +1,17 @@
+# PKGBUILD — albanix-bench
+# Albanix OS performance benchmark script (boot time, RAM, CPU, disk).
+# Runs on the HOST (makepkg).
+pkgname=albanix-bench
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS performance benchmark (Markdown output)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('bash' 'coreutils' 'zstd' 'procps-ng')
+source=("albanix-bench")
+sha256sums=('SKIP')
+
+package() {
+  install -D -m 0755 "${srcdir}/albanix-bench" "${pkgdir}/usr/bin/albanix-bench"
+}

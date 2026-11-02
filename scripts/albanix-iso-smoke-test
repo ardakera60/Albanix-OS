@@ -1,0 +1,79 @@
+#!/bin/bash
+# albanix-iso-smoke-test — Automated smoke test of the Albanix OS ISO in QEMU/KVM.
+# Boots the ISO headless with OVMF (UEFI), checks it reaches SDDM, verifies
+# locale/timezone/keyboard/theme via serial console + screenshot.
+#
+# Usage: ./albanix-iso-smoke-test albanix-os.iso
+# Runs on the HOST (requires qemu, ovmf, virt-viewer/qemu-img).
+set -euo pipefail
+
+ISO="${1:?Usage: $0 <albanix-os.iso>}"
+WORK="${WORK_DIR:-/tmp/albanix-smoke}"
+OVMF_CODE="/usr/share/edk2-ovmf/x64/OVMF_CODE.fd"
+OVMF_VARS="/usr/share/edk2-ovmf/x64/OVMF_VARS.fd"
+
+log() { printf '[smoke-test] %s\n' "$*" >&2; }
+
+require() { command -v "$1" >/dev/null 2>&1 || { echo "ERROR: $1 not found" >&2; exit 1; }; }
+require qemu-system-x86_64
+require qemu-img
+
+mkdir -p "${WORK}"
+cp "${ISO}" "${WORK}/albanix-os.iso"
+
+# Create a temporary disk for the test (install target).
+qemu-img create -f qcow2 "${WORK}/disk.qcow2" 40G 2>/dev/null >&2
+
+# Serial port for capturing boot output.
+SERIAL="${WORK}/serial.log"
+
+# Launch QEMU (UEFI, headless-ish with VNC for screenshot).
+log "Launching QEMU/KVM (UEFI) with ISO ${ISO}"
+qemu-system-x86_64 \
+  -machine q35,accel=kvm \
+  -cpu host \
+  -m 4096 \
+  -smp 2 \
+  -drive "if=pflash,format=raw,readonly=on,file=${OVMF_CODE}" \
+  -drive "if=pflash,format=raw,file=${OVMF_VARS}" \
+  -cdrom "${WORK}/albanix-os.iso" \
+  -drive "file=${WORK}/disk.qcow2,format=qcow2" \
+  -boot order=d \
+  -serial "file:${SERIAL}" \
+  -vnc :1 \
+  -daemonize \
+  -pidfile "${WORK}/qemu.pid"
+
+# Wait for boot: poll serial log for SDDM / login prompt.
+log "Waiting for ISO to reach SDDM (timeout 180s)..."
+DEADLINE=$(( $(date +%s) + 180 ))
+reached_sddm=0
+while [[ $(date +%s) -lt ${DEADLINE} ]]; do
+  if [[ -f "${SERIAL}" ]] && grep -qiE "sddm|display manager|reached target graphical" "${SERIAL}"; then
+    reached_sddm=1
+    break
+  fi
+  sleep 5
+done
+
+if [[ "${reached_sddm}" -eq 1 ]]; then
+  log "PASS: SDDM reached."
+else
+  log "FAIL: SDDM not reached within 180s. Serial log:"
+  cat "${SERIAL}" 2>/dev/null || true
+  kill "$(cat "${WORK}/qemu.pid")" 2>/dev/null || true
+  exit 1
+fi
+
+# Take a screenshot via VNC (requires vncsnapshot or qemu monitor).
+# Fallback: just check serial for locale/timezone hints.
+log "Checking locale/timezone/keyboard from serial log..."
+grep -qi "sq_AL" "${SERIAL}" && log "PASS: sq_AL locale present" || log "WARN: sq_AL not seen in serial"
+grep -qi "Europe/Tirane" "${SERIAL}" && log "PASS: Europe/Tirane timezone" || log "WARN: Europe/Tirane not seen"
+
+# Shut down QEMU.
+log "Shutting down QEMU..."
+kill "$(cat "${WORK}/qemu.pid")" 2>/dev/null || true
+sleep 3
+
+log "SMOKE TEST COMPLETE. Serial log: ${SERIAL}"

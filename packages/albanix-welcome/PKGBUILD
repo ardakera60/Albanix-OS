@@ -1,0 +1,38 @@
+# PKGBUILD — albanix-welcome
+# Albanix OS welcome application: "Mirë se vini në Albanix OS"
+# Python + PyQt6, multi-page, Albanian (sq) + English (en).
+# Runs on the HOST (makepkg).
+pkgname=albanix-welcome
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS welcome application (Python + PyQt6)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('python' 'python-pyqt6' 'gettext')
+source=("albanix-welcome"
+        "albanix-welcome.desktop"
+        "albanix-welcome.qml"
+        "albanix-welcome.py")
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -D -m 0755 "${srcdir}/albanix-welcome" "${pkgdir}/usr/bin/albanix-welcome"
+  install -D -m 0644 "${srcdir}/albanix-welcome.desktop" \
+    "${pkgdir}/usr/share/applications/albanix-welcome.desktop"
+  install -D -m 0644 "${srcdir}/albanix-welcome.qml" \
+    "${pkgdir}/usr/share/albanix-welcome/albanix-welcome.qml"
+  install -D -m 0755 "${srcdir}/albanix-welcome.py" \
+    "${pkgdir}/usr/share/albanix-welcome/albanix-welcome.py"
+  # Autostart once on first login.
+  install -d "${pkgdir}/etc/xdg/autostart"
+  cat > "${pkgdir}/etc/xdg/autostart/albanix-welcome.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Albanix Welcome
+Name[sq]=Mirë se vini në Albanix OS
+Exec=albanix-welcome --first-login
+OnlyShowIn=KDE;
+X-KDE-autostart-condition=alis.sh
+EOF
+}

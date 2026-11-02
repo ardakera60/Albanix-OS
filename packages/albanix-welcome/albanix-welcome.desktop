@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Albanix Welcome
+Name[sq]=Mirë se vini në Albanix OS
+GenericName=Welcome to Albanix OS
+GenericName[sq]=Mirë se vini në sistemin Albanix OS
+Comment=Welcome, setup and theming for Albanix OS
+Comment[sq]=Mirëseardhja, konfigurimi dhe temat e sistemit Albanix OS
+Exec=albanix-welcome
+Icon=albanix-logo
+Terminal=false
+Categories=System;Settings;
+Keywords=welcome;setup;theme;language;albanian;

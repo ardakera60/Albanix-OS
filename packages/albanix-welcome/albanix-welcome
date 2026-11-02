@@ -1,0 +1,4 @@
+#!/bin/bash
+# albanix-welcome launcher — runs the Python welcome app.
+# Runs on the INSTALLED system (normal user).
+exec python3 /usr/share/albanix-welcome/albanix-welcome.py "$@"

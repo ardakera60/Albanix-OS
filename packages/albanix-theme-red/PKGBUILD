@@ -1,0 +1,45 @@
+# PKGBUILD — albanix-theme-red
+# Albanix Red theme: Plasma look-and-feel org.albanix.red, color scheme (dark+light),
+# SDDM theme, Plymouth theme, bootloader theme entries.
+# Runs on the HOST (makepkg).
+pkgname=albanix-theme-red
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS theme — Red (black & red, Albanian flag motif)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('plasma-workspace' 'sddm' 'plymouth' 'systemd-boot')
+source=(
+  "org.albanix.red.metadata.desktop"
+  "org.albanix.red.layout.js"
+  "Albanix-Red-dark.colors"
+  "Albanix-Red-light.colors"
+  "sddm-albanix-red/"
+  "plymouth-albanix-red/"
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  # Plasma look-and-feel
+  install -d "${pkgdir}/usr/share/plasma/look-and-feel/org.albanix.red/contents"
+  install -D -m 0644 "${srcdir}/org.albanix.red.metadata.desktop" \
+    "${pkgdir}/usr/share/plasma/look-and-feel/org.albanix.red/metadata.desktop"
+  install -D -m 0644 "${srcdir}/org.albanix.red.layout.js" \
+    "${pkgdir}/usr/share/plasma/look-and-feel/org.albanix.red/contents/layout.js"
+
+  # Color schemes
+  install -d "${pkgdir}/usr/share/color-schemes"
+  install -D -m 0644 "${srcdir}/Albanix-Red-dark.colors" \
+    "${pkgdir}/usr/share/color-schemes/AlbanixRed-dark.colors"
+  install -D -m 0644 "${srcdir}/Albanix-Red-light.colors" \
+    "${pkgdir}/usr/share/color-schemes/AlbanixRed-light.colors"
+
+  # SDDM theme
+  install -d "${pkgdir}/usr/share/sddm/themes/albanix-red"
+  cp -r "${srcdir}/sddm-albanix-red/." "${pkgdir}/usr/share/sddm/themes/albanix-red/"
+
+  # Plymouth theme
+  install -d "${pkgdir}/usr/share/plymouth/themes/albanix-red"
+  cp -r "${srcdir}/plymouth-albanix-red/." "${pkgdir}/usr/share/plymouth/themes/albanix-red/"
+}

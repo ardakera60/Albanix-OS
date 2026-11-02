@@ -1,0 +1,47 @@
+/* stylesheet.qss — Albanix OS Calamares installer styling */
+/* Runs on the LIVE ISO. */
+
+* {
+    font-family: "Inter", "Noto Sans", sans-serif;
+    font-size: 13px;
+}
+
+QWidget#MainWindow {
+    background: #0B0B0F;
+    color: #F5F3EF;
+}
+
+QLabel {
+    color: #F5F3EF;
+}
+
+QPushButton {
+    background: #E41E20;
+    color: #F5F3EF;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: #D4A537;
+    color: #0B0B0F;
+}
+
+QPushButton:disabled {
+    background: #2A2A33;
+    color: #A9B6D3;
+}
+
+QFrame#Sidebar {
+    background: #15151B;
+    border-right: 1px solid #2A2A33;
+}
+
+QAbstractItemView {
+    background: #15151B;
+    color: #F5F3EF;
+    selection-background-color: #E41E20;
+    selection-color: #F5F3EF;
+}

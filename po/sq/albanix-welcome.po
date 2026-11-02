@@ -1,0 +1,150 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: albanix-welcome 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/arda/albanix-os/issues\n"
+"POT-Creation-Date: 2026-11-02 00:00+0000\n"
+"PO-Revision-Date: 2026-11-02 00:00+0000\n"
+"Language: sq\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: gettext\n"
+"Plural-Forms: nplurals=3; plural=(n==1 || n%100>=2 && n%100<=4) ? (n%100==1 ? 0 : (n%100==2 ? 1 : 2)) : 0;\n"
+
+msgid "Mirë se vini në Albanix OS / Welcome to Albanix OS"
+msgstr "Mirë se vini në Albanix OS"
+
+msgid "Fast. Beautiful. Albanian. — Shpejtë. E bukur. Shqiptare."
+msgstr "Shpejtë. E bukur. Shqiptare."
+
+msgid "Welcome to Albanix OS, the Albanian-first Arch Linux distribution with KDE Plasma 6. This assistant will help you choose your language, keyboard, timezone, theme and optional software groups."
+msgstr "Mirë se vini në Albanix OS, distribucionin e parë shqip me Arch Linux dhe KDE Plasma 6. Ky asistent do të ju ndihmojë të zgjidhni gjuhën, tastaturën, orën, temën dhe grupat opsionale të softuerit."
+
+msgid "Continue"
+msgstr "Vazhdo"
+
+msgid "Back"
+msgstr "Kthehu"
+
+msgid "Finish"
+msgstr "Mbaro"
+
+msgid "Gjuhë / Language"
+msgstr "Gjuha"
+
+msgid "Choose the system language. Albanian is the default."
+msgstr "Zgjedhni gjuhën e sistemit. Shqip është parazgjedhja."
+
+msgid "Shqip (Albanian) — default"
+msgstr "Shqip (Albanian) — parazgjedhje"
+
+msgid "English"
+msgstr "Anglisht"
+
+msgid "Tastaturë / Keyboard"
+msgstr "Tastatura"
+
+msgid "Albanian (al) + English (us). Alt+Shift switches; AltGr/compose types ë and ç."
+msgstr "Shqip (al) + Anglisht (us). Alt+Shift shtrihet; AltGr/compose shkruan ë dhe ç."
+
+msgid "Shqip (al)"
+msgstr "Shqip (al)"
+
+msgid "Anglisht (us)"
+msgstr "Anglisht (us)"
+
+msgid "On a US keyboard: AltGr+e = ë, AltGr+c = ç (compose). Week starts Monday, dates dd.MM.yyyy, 24-hour clock."
+msgstr "Një tastaturë US: AltGr+e = ë, AltGr+c = ç (compose). Java fillon e hënën, datat dd.MM.yyyy, orë 24-orë."
+
+msgid "Orë / Timezone"
+msgstr "Ora"
+
+msgid "Default Europe/Tirane (Albania). Kosovo users may choose Europe/Belgrade."
+msgstr "Parazgjedhja: Europe/Tirane (Shqipëri). Përdoruesit e Kosovës mund të zgjedhin Europe/Belgrade."
+
+msgid "Europe/Tirane — Shqipëri (default)"
+msgstr "Europe/Tirane — Shqipëri (parazgjedhje)"
+
+msgid "Europe/Belgrade — Kosovë"
+msgstr "Europe/Belgrade — Kosovë"
+
+msgid "Both zones share UTC+1 / CEST. NTP will be enabled."
+msgstr "Rratë dua largojnë UTC+1 / CEST. NTP do të jetë i aktuar."
+
+msgid "Temë / Theme"
+msgstr "Tema"
+
+msgid "Choose your Albanix theme. The whole system switches: Plasma, SDDM, Plymouth, wallpaper, Konsole, fastfetch, starship."
+msgstr "Zgjidhni temën tuaj të Albanix. Sistemi i plotë ndërtohet: Plasma, SDDM, Plymouth, tapeti, Konsole, fastfetch, starship."
+
+msgid "Albanix Red — black & red (Albanian flag motif)"
+msgstr "Albanix Red — i zezë & i kuq (motivi i flamurit shqiptar)"
+
+msgid "Red #E41E20 • Black #0B0B0F • Gold #D4A537"
+msgstr "Kuq #E41E20 • i zezë #0B0B0F • art #D4A537"
+
+msgid "Albanix Blue — navy & gold (Kosovo flag motif)"
+msgstr "Albanix Blue — navy & art (motivi i flamurit të Kosovës)"
+
+msgid "Blue #244AA5 • Navy #07101F • Gold #D0A650"
+msgstr "Blui #244AA5 • navy #07101F • art #D0A650"
+
+msgid "Paketë opsionale / Optional software"
+msgstr "Sofuer opsional"
+
+msgid "Select groups to install now. You can add more later with the albanix CLI."
+msgstr "Zgjidhni grupët që do të instalohen tani. Mund të shtoni më vonë me komandën albanix."
+
+msgid "Developer — git, node, pnpm, python, rustup, docker, podman, VS Code OSS"
+msgstr "Developer — git, node, pnpm, python, rustup, docker, podman, VS Code OSS"
+
+msgid "Gaming — steam, proton-ge, gamemode, mangohud, lutris"
+msgstr "Gaming — steam, proton-ge, gamemode, mangohud, lutris"
+
+msgid "Creator — obs, kdenlive, krita, gimp, inkscape, blender"
+msgstr "Creator — obs, kdenlive, krita, gimp, inkscape, blender"
+
+msgid "Office — libreoffice, okular"
+msgstr "Ofis — libreoffice, okular"
+
+msgid "Privacy — wireguard-tools, tor browser launcher"
+msgstr "Dat privat — wireguard-tools, tor browser launcher"
+
+msgid "Përfatësia / Privacy"
+msgstr "Përfatësia"
+
+msgid "Albanix OS has no telemetry, no ads and no tracking. Nothing phones home except configured package mirrors and NTP servers."
+msgstr "Albanix OS nuk ka telemetri, reklama dhe monitorizim. Asnjë kontakt pa shtëji, përveç mirror-sve të konfiguruar të paketave dhe serverëve NTP."
+
+msgid "We do not collect or transmit any personal data. The only network contacts are the pacman mirrors you configure, NTP time servers, and Flathub for Flatpak updates — all optional and opt-outable."
+msgstr "Nuk koleksiojmë dhe nën transmitim asnjë datë personale. Kontaktet rrjeti unike janë mirror-t e pacman-it që konfiguroni, serverët NTP dhe Flathub për përditësime Flatpak — të gjithë opsionale dhe të mund ta humbasni."
+
+msgid "Këshilla / Tips"
+msgstr "Këshilla"
+
+msgid "Open a terminal to see fastfetch. Switch themes anytime with albanix-theme red|blue. Benchmark with albanix-bench."
+msgstr "Hapni një terminal për të parë fastfetch. Ndryshoni temën herëjet me albanix-theme red|blue. Proveni me albanix-bench."
+
+msgid "Terminal: fastfetch runs on first open (per theme)."
+msgstr "Terminal: fastfetch ekzekutohet në hapjen e parë (për çdo temë)."
+
+msgid "Theme switcher: albanix-theme red | albanix-theme blue."
+msgstr "Ndërtojës temash: albanix-theme red | albanix-theme blue."
+
+msgid "Benchmark: albanix-bench (prints a Markdown table)."
+msgstr "Prova e performancës: albanix-bench (printon një tabelë Markdown)."
+
+msgid "Snapshots: snapper is configured; a snapshot is taken before every pacman upgrade."
+msgstr "Snapshot-ët: snapper është konfiguruar; një snapshot marhet para çdo përditërimi pacman."
+
+msgid "Firewall: ufw is enabled (deny incoming, allow outgoing)."
+msgstr "Tijzësia: ufw është i aktuar (refuzon hyrjen, lejon daljen)."
+
+msgid "Mbarim / Done"
+msgstr "Mbaroi"
+
+msgid "Albanix OS is ready. Enjoy!"
+msgstr "Albanix OS është i gatshëm. Ju lutem!"
+
+msgid "Your choices have been applied. Reopen this app anytime from the application menu (Albanix Welcome)."
+msgstr "Zgjedhjet tuaja janë aplikuar. Hapni e rradhë këtë aplikacion nga menja e aplikacioneve (Albanix Welcome)."

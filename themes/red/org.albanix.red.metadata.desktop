@@ -1,0 +1,16 @@
+[Desktop Entry]
+X-Plasma-API=javascript
+X-Plasma-ContainmentLayout=org.albanix.red
+X-KDE-PluginInfo-Author=Albanix OS project
+X-KDE-PluginInfo-Email=contact@albanix-os.example
+X-KDE-PluginInfo-Name=org.albanix.red
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-Website=https://github.com/arda/albanix-os
+X-KDE-PluginInfo-License=GPL-3.0-or-later
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-Category=LookAndFeel
+Name=Albanix Red
+Name[sq]=Albanix Kuq
+Comment=Albanix OS Red theme — black and red, Albanian flag motif
+Comment[sq]=Tema e kuqe e sistemit Albanix OS — i zezë e i kuq, motivi i flamurit shqiptar
+Icon=albanix-logo

@@ -1,0 +1,41 @@
+// fastfetch config — Albanix OS (per-theme logo)
+// Runs in the LIVE ISO and on installed systems.
+{
+  "logo": {
+    "source": "albanix",
+    "width": 45,
+    "height": 22
+  },
+  "display": {
+    "Separator": {
+      "separatorStyle": "simple",
+      "separatorCharacter": "─",
+      "colons": "albanix-red"
+    },
+    "Title": { "separator": ":", "osArch": true },
+    "OS": {},
+    "Host": {},
+    "Kernel": {},
+    "Uptime": {},
+    "Packages": { "command": "pacman -Q | wc -l" },
+    "Shell": {},
+    "DE": {},
+    "WM": {},
+    "WMTheme": {},
+    "Theme": {},
+    "Icons": {},
+    "Cursor": {},
+    "Terminal": {},
+    "TerminalFont": {},
+    "CPU": {},
+    "GPU": {},
+    "Memory": {},
+    "Swap": {},
+    "Disk": {},
+    "Battery": {},
+    "LocalIP": {},
+    "PublicIP": {},
+    "Locale": {},
+    "Keyboard": { "layout": true }
+  }
+}

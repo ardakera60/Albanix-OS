@@ -1,0 +1,40 @@
+# branding.desc — Albanix OS Calamares branding
+# Runs on the LIVE ISO (installed by albanix-installer-config).
+
+component: "albanix"
+name: "Albanix OS"
+description: "Albanian-first Arch Linux distribution with KDE Plasma 6."
+version: "0.1.0"
+copyright: "Copyright (C) 2026 Albanix OS project"
+license: "GPL-3.0-or-later"
+welcome: "Mirë se vini në Albanix OS / Welcome to Albanix OS"
+
+# Slideshow QML file (shown while Calamares runs).
+slideshow: "show.qml"
+
+# Stylesheet (QSS) applied to the installer window.
+stylesheet: "stylesheet.qss"
+
+# SVG assets (drawn for Albanix OS; see themes/).
+logo: "branding/albanix/logo-albanix.svg"
+wordmark: "branding/albanix/wordmark-albanix.svg"
+eagle: "branding/albanix/eagle-mark.svg"
+
+# Theme preview images for the custom "Zgjidh temën / Choose your theme" step.
+theme_preview_red: "branding/albanix/theme-preview-red.svg"
+theme_preview_blue: "branding/albanix/theme-preview-blue.svg"
+
+# Defaults.
+default_locale: "sq"
+default_timezone: "Europe/Tirane"
+default_keyboard: "al"
+default_theme: "red"
+
+# Keyboard layouts offered on the keyboard page (Albanian + US).
+keyboard_layouts:
+  - layout: "al"
+    variant: ""
+    name: "Shqip"
+  - layout: "us"
+    variant: ""
+    name: "English (US)"

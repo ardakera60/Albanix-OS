@@ -1,0 +1,31 @@
+# Build artifacts
+out/
+work/
+src/
+pkg/
+
+# Package files
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+
+# Local repo
+*.db.tar.zst
+*.files.tar.zst
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build work directories
+.chroot/

@@ -1,0 +1,150 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: albanix-welcome 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/arda/albanix-os/issues\n"
+"POT-Creation-Date: 2026-11-02 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: gettext\n"
+
+msgid "Mirë se vini në Albanix OS / Welcome to Albanix OS"
+msgstr ""
+
+msgid "Fast. Beautiful. Albanian. — Shpejtë. E bukur. Shqiptare."
+msgstr ""
+
+msgid "Welcome to Albanix OS, the Albanian-first Arch Linux distribution with KDE Plasma 6. This assistant will help you choose your language, keyboard, timezone, theme and optional software groups."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Finish"
+msgstr ""
+
+msgid "Gjuhë / Language"
+msgstr ""
+
+msgid "Choose the system language. Albanian is the default."
+msgstr ""
+
+msgid "Shqip (Albanian) — default"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "Tastaturë / Keyboard"
+msgstr ""
+
+msgid "Albanian (al) + English (us). Alt+Shift switches; AltGr/compose types ë and ç."
+msgstr ""
+
+msgid "Shqip (al)"
+msgstr ""
+
+msgid "Anglisht (us)"
+msgstr ""
+
+msgid "On a US keyboard: AltGr+e = ë, AltGr+c = ç (compose). Week starts Monday, dates dd.MM.yyyy, 24-hour clock."
+msgstr ""
+
+msgid "Orë / Timezone"
+msgstr ""
+
+msgid "Default Europe/Tirane (Albania). Kosovo users may choose Europe/Belgrade."
+msgstr ""
+
+msgid "Europe/Tirane — Shqipëri (default)"
+msgstr ""
+
+msgid "Europe/Belgrade — Kosovë"
+msgstr ""
+
+msgid "Both zones share UTC+1 / CEST. NTP will be enabled."
+msgstr ""
+
+msgid "Temë / Theme"
+msgstr ""
+
+msgid "Choose your Albanix theme. The whole system switches: Plasma, SDDM, Plymouth, wallpaper, Konsole, fastfetch, starship."
+msgstr ""
+
+msgid "Albanix Red — black & red (Albanian flag motif)"
+msgstr ""
+
+msgid "Red #E41E20 • Black #0B0B0F • Gold #D4A537"
+msgstr ""
+
+msgid "Albanix Blue — navy & gold (Kosovo flag motif)"
+msgstr ""
+
+msgid "Blue #244AA5 • Navy #07101F • Gold #D0A650"
+msgstr ""
+
+msgid "Paketë opsionale / Optional software"
+msgstr ""
+
+msgid "Select groups to install now. You can add more later with the albanix CLI."
+msgstr ""
+
+msgid "Developer — git, node, pnpm, python, rustup, docker, podman, VS Code OSS"
+msgstr ""
+
+msgid "Gaming — steam, proton-ge, gamemode, mangohud, lutris"
+msgstr ""
+
+msgid "Creator — obs, kdenlive, krita, gimp, inkscape, blender"
+msgstr ""
+
+msgid "Office — libreoffice, okular"
+msgstr ""
+
+msgid "Privacy — wireguard-tools, tor browser launcher"
+msgstr ""
+
+msgid "Përfatësia / Privacy"
+msgstr ""
+
+msgid "Albanix OS has no telemetry, no ads and no tracking. Nothing phones home except configured package mirrors and NTP servers."
+msgstr ""
+
+msgid "We do not collect or transmit any personal data. The only network contacts are the pacman mirrors you configure, NTP time servers, and Flathub for Flatpak updates — all optional and opt-outable."
+msgstr ""
+
+msgid "Këshilla / Tips"
+msgstr ""
+
+msgid "Open a terminal to see fastfetch. Switch themes anytime with albanix-theme red|blue. Benchmark with albanix-bench."
+msgstr ""
+
+msgid "Terminal: fastfetch runs on first open (per theme)."
+msgstr ""
+
+msgid "Theme switcher: albanix-theme red | albanix-theme blue."
+msgstr ""
+
+msgid "Benchmark: albanix-bench (prints a Markdown table)."
+msgstr ""
+
+msgid "Snapshots: snapper is configured; a snapshot is taken before every pacman upgrade."
+msgstr ""
+
+msgid "Firewall: ufw is enabled (deny incoming, allow outgoing)."
+msgstr ""
+
+msgid "Mbarim / Done"
+msgstr ""
+
+msgid "Albanix OS is ready. Enjoy!"
+msgstr ""
+
+msgid "Your choices have been applied. Reopen this app anytime from the application menu (Albanix Welcome)."
+msgstr ""
+
+msgid "Mirë se vini në Albanix OS / Welcome to Albanix OS"
+msgstr ""

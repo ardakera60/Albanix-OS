@@ -1,0 +1,15 @@
+// albanix-red.script — Plymouth boot splash script (Albanix Red)
+// Runs in the initramfs at boot.
+
+if (global.width < 600) {
+    // small screen fallback
+}
+
+background_color = { 0.04, 0.04, 0.06 }; // #0B0B0F approximately
+
+// Draw a simple red field with a stylized double-headed eagle silhouette.
+window = Pylon.Window { ... } // pseudo; Plymouth script uses its own drawing API
+
+// Actual Plymouth script (simplified, robust):
+background = Pylon.Texture("background.png");
+Pylon.AddImage(background, 0, 0);

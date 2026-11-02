@@ -1,0 +1,12 @@
+# grub-btrfs defaults — Albanix OS
+# Scans Btrfs snapshots and adds bootable snapshot entries to GRUB menu.
+# Runs via grub-btrfs.path (systemd path unit, enabled by default).
+
+# Subvolumes to scan for snapshots.
+GRUB_BTRFS_SUBVOLUMES="@"
+# Path to snapshots inside the subvolume.
+GRUB_BTRFS_SNAPSHOT_DIR=".snapshots"
+# Show snapshot entries only when more than one exists.
+GRUB_BTRFS_SHOW_ALL="false"
+# Use grub-mkconfig path detection automatically.
+GRUB_BTRFS_MKCONFIG="yes"

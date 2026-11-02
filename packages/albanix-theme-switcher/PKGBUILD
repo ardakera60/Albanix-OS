@@ -1,0 +1,20 @@
+# PKGBUILD — albanix-theme-switcher
+# Installs the albanix-theme CLI + settings tool and its desktop file.
+# Runs on the HOST (makepkg).
+pkgname=albanix-theme-switcher
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS theme switcher (albanix-theme CLI)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('bash' 'plasma-workspace' 'sddm' 'plymouth' 'mkinitcpio' 'grub')
+source=("albanix-theme"
+        "albanix-theme.desktop")
+sha256sums=('SKIP' 'SKIP')
+
+package() {
+  install -D -m 0755 "${srcdir}/albanix-theme" "${pkgdir}/usr/bin/albanix-theme"
+  install -D -m 0644 "${srcdir}/albanix-theme.desktop" \
+    "${pkgdir}/usr/share/applications/albanix-theme.desktop"
+}

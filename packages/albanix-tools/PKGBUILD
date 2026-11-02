@@ -1,0 +1,24 @@
+# PKGBUILD — albanix-tools
+# Albanix OS helper scripts: albanix-repo-select, albanix-graphics-select,
+# albanix-theme-switcher backend helpers.
+# Runs on the HOST (makepkg).
+pkgname=albanix-tools
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS system helper scripts"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('bash' 'coreutils' 'grep' 'sed' 'awk' 'pciutils')
+source=("albanix-repo-select"
+        "albanix-graphics-select"
+        "albanix")
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -D -m 0755 "${srcdir}/albanix-repo-select" \
+    "${pkgdir}/usr/bin/albanix-repo-select"
+  install -D -m 0755 "${srcdir}/albanix-graphics-select" \
+    "${pkgdir}/usr/bin/albanix-graphics-select"
+  install -D -m 0755 "${srcdir}/albanix" "${pkgdir}/usr/bin/albanix"
+}

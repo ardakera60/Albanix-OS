@@ -1,0 +1,59 @@
+# PKGBUILD — albanix-settings
+# Albanix OS system performance + security settings (sysctl, zram, ananicy,
+# udev I/O schedulers, oomd, reflector, ufw defaults, AppArmor baseline).
+# Runs on the HOST (makepkg); installed into the ISO + target systems.
+pkgname=albanix-settings
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS system performance and security settings"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('systemd' 'zram-generator' 'ananicy-cpp' 'power-profiles-daemon'
+         'thermald' 'ufw' 'apparmor' 'reflector')
+source=(
+  "99-albanix-performance.conf"
+  "albanix.conf::zram-generator.conf"
+  "albanix.rules::ananicy.rules"
+  "power-profiles-daemon.config"
+  "thermald.conf"
+  "60-albanix-iosched.rules"
+  "oomd.conf"
+  "reflector.conf"
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  # sysctl tuning
+  install -D -m 0644 "${srcdir}/99-albanix-performance.conf" \
+    "${pkgdir}/etc/sysctl.d/99-albanix-performance.conf"
+
+  # zram
+  install -d "${pkgdir}/etc/systemd/zram-generator.conf.d"
+  install -D -m 0644 "${srcdir}/albanix.conf::zram-generator.conf" \
+    "${pkgdir}/etc/systemd/zram-generator.conf.d/albanix.conf"
+
+  # ananicy-cpp rules
+  install -d "${pkgdir}/etc/ananicy.d"
+  install -D -m 0644 "${srcdir}/albanix.rules::ananicy.rules" \
+    "${pkgdir}/etc/ananicy.d/albanix.rules"
+
+  # power-profiles-daemon
+  install -D -m 0644 "${srcdir}/power-profiles-daemon.config" \
+    "${pkgdir}/etc/power-profiles-daemon.config"
+
+  # thermald
+  install -d "${pkgdir}/etc/thermald"
+  install -D -m 0644 "${srcdir}/thermald.conf" "${pkgdir}/etc/thermald/thermald.conf"
+
+  # udev I/O scheduler rules
+  install -D -m 0644 "${srcdir}/60-albanix-iosched.rules" \
+    "${pkgdir}/etc/udev/rules.d/60-albanix-iosched.rules"
+
+  # systemd-oomd
+  install -D -m 0644 "${srcdir}/oomd.conf" "${pkgdir}/etc/systemd/oomd.conf"
+
+  # reflector
+  install -d "${pkgdir}/etc/xdg/reflector"
+  install -D -m 0644 "${srcdir}/reflector.conf" "${pkgdir}/etc/xdg/reflector/reflector.conf"
+}

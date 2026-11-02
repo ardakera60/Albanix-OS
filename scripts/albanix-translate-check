@@ -1,0 +1,48 @@
+#!/bin/bash
+# albanix-translate-check — CI translation completeness check
+# Fails if any sq .po file has untranslated (empty msgstr) strings.
+# Runs in CI (GitHub Actions translations.yml) and locally before PRs.
+set -euo pipefail
+
+PO_DIR="${1:-po/sq}"
+POT_FILE="${2:-po/albanix-welcome.pot}"
+
+fail=0
+
+if [[ ! -d "${PO_DIR}" ]]; then
+  echo "ERROR: translation directory ${PO_DIR} not found." >&2
+  exit 1
+fi
+
+for po in "${PO_DIR}"/*.po; do
+  [[ -e "${po}" ]] || continue
+  echo "Checking ${po} ..."
+  # msgfmt -c validates and reports untranslated/fuzzy entries.
+  if ! msgfmt -c -o /dev/null "${po}" 2>/dev/null; then
+    echo "FAIL: untranslated or malformed strings in ${po}" >&2
+    fail=1
+  fi
+done
+
+# Ensure every msgid in the .pot exists in each .po (coverage check).
+if [[ -f "${POT_FILE}" ]]; then
+  for po in "${PO_DIR}"/*.po; do
+    [[ -e "${po}" ]] || continue
+    missing="$(comm -23 \
+      <(msgunfmt "${POT_FILE}" 2>/dev/null | sed -n 's/^msgid //p' | sort -u) \
+      <(msgunfmt "${po}" 2>/dev/null | sed -n 's/^msgstr //p' | sort -u) \
+      | grep -v '^$' || true)"
+    if [[ -n "${missing}" ]]; then
+      echo "FAIL: ${po} is missing translations for:" >&2
+      echo "${missing}" >&2
+      fail=1
+    fi
+  done
+fi
+
+if [[ "${fail}" -ne 0 ]]; then
+  echo "Translation check FAILED." >&2
+  exit 1
+fi
+
+echo "All Albanian translations complete."

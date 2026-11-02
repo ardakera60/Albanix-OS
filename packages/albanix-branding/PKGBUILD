@@ -1,0 +1,30 @@
+# PKGBUILD — albanix-branding
+# OS branding files: os-release, issue, motd, wallpaper metadata placeholders,
+# logo SVG assets for the live ISO and installed system.
+# Runs on the HOST (makepkg).
+pkgname=albanix-branding
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS branding (os-release, issue, motd, logo SVGs)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+source=("os-release"
+        "issue"
+        "motd"
+        "logo-albanix.svg"
+        "wordmark-albanix.svg"
+        "eagle-mark.svg")
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -d "${pkgdir}/etc"
+  install -m 0644 "${srcdir}/os-release" "${pkgdir}/etc/os-release"
+  install -m 0644 "${srcdir}/issue"      "${pkgdir}/etc/issue"
+  install -m 0644 "${srcdir}/motd"       "${pkgdir}/etc/motd"
+
+  install -d "${pkgdir}/usr/share/albanix-branding"
+  install -m 0644 "${srcdir}/logo-albanix.svg"   "${pkgdir}/usr/share/albanix-branding/"
+  install -m 0644 "${srcdir}/wordmark-albanix.svg" "${pkgdir}/usr/share/albanix-branding/"
+  install -m 0644 "${srcdir}/eagle-mark.svg"     "${pkgdir}/usr/share/albanix-branding/"
+}

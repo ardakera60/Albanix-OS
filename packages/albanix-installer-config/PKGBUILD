@@ -1,0 +1,85 @@
+# PKGBUILD — albanix-installer-config
+# Calamares installer configuration for Albanix OS: module configs, branding,
+# custom theme-choice + optional-groups modules, post-install script.
+# Runs on the HOST (makepkg).
+pkgname=albanix-installer-config
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS Calamares installer configuration"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+depends=('calamares')
+source=(
+  "settings.conf"
+  "branding.desc"
+  "show.qml"
+  "stylesheet.qss"
+  "welcome.conf"
+  "locale.conf"
+  "keyboard.conf"
+  "partition.conf"
+  "users.conf"
+  "summary.conf"
+  "displaymanager.conf"
+  "networkcfg.conf"
+  "hwclock.conf"
+  "machineid.conf"
+  "localecfg.conf"
+  "initcpiocfg.conf"
+  "initcpio.conf"
+  "luksbootkeyfile.conf"
+  "mount.conf"
+  "unpackfs.conf"
+  "packages.conf"
+  "services-systemd.conf"
+  "grubcfg.conf"
+  "bootloader.conf"
+  "umount.conf"
+  "finished.conf"
+  "shellprocess.conf"
+  "albanix-theme-choice.conf"
+  "albanix-theme-choice.py"
+  "albanix-theme-choice.qml"
+  "albanix-optional-groups.conf"
+  "albanix-optional-groups.py"
+  "albanix-optional-groups.qml"
+  "albanix-postinstall.sh"
+  "theme-preview-red.svg"
+  "theme-preview-blue.svg"
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
+            'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
+            'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
+            'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  # Calamares module configs
+  install -d "${pkgdir}/etc/calamares/modules"
+  for f in "${srcdir}"/*.conf; do
+    install -D -m 0644 "${f}" "${pkgdir}/etc/calamares/modules/$(basename "${f}")"
+  done
+
+  # Settings + branding
+  install -D -m 0644 "${srcdir}/settings.conf" "${pkgdir}/etc/calamares/settings.conf"
+  install -d "${pkgdir}/usr/share/calamares/branding/albanix"
+  install -D -m 0644 "${srcdir}/branding.desc" "${pkgdir}/usr/share/calamares/branding/albanix/branding.desc"
+  install -D -m 0644 "${srcdir}/show.qml"    "${pkgdir}/usr/share/calamares/branding/albanix/show.qml"
+  install -D -m 0644 "${srcdir}/stylesheet.qss" "${pkgdir}/usr/share/calamares/branding/albanix/stylesheet.qss"
+
+  # Custom theme-choice module
+  install -d "${pkgdir}/usr/lib/calamares/modules"
+  install -D -m 0755 "${srcdir}/albanix-theme-choice.py" "${pkgdir}/usr/lib/calamares/modules/albanix-theme-choice.py"
+  install -D -m 0644 "${srcdir}/albanix-theme-choice.qml" "${pkgdir}/usr/share/calamares/modules/albanix-theme-choice.qml"
+
+  # Custom optional-groups module
+  install -D -m 0755 "${srcdir}/albanix-optional-groups.py" "${pkgdir}/usr/lib/calamares/modules/albanix-optional-groups.py"
+  install -D -m 0644 "${srcdir}/albanix-optional-groups.qml" "${pkgdir}/usr/share/calamares/modules/albanix-optional-groups.qml"
+
+  # Post-install script (runs in chroot via shellprocess)
+  install -D -m 0755 "${srcdir}/albanix-postinstall.sh" "${pkgdir}/usr/share/calamares/scripts/albanix-postinstall.sh"
+
+  # Theme preview images for the Calamares theme-choice step
+  install -D -m 0644 "${srcdir}/theme-preview-red.svg"  "${pkgdir}/usr/share/calamares/branding/albanix/theme-preview-red.svg"
+  install -D -m 0644 "${srcdir}/theme-preview-blue.svg" "${pkgdir}/usr/share/calamares/branding/albanix/theme-preview-blue.svg"
+}

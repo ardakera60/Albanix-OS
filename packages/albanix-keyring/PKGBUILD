@@ -1,0 +1,21 @@
+# PKGBUILD — albanix-keyring
+# Albanix OS package signing key for the [albanix] repository.
+# Runs on the HOST (makepkg) and is installed into the ISO + target systems.
+pkgname=albanix-keyring
+pkgver=20261102
+pkgrel=1
+pkgdesc="Albanix OS PGP keyring for the [albanix] package repository"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+install="${pkgname}.install"
+source=("albanix.gpg"
+        "albanix-trusted")
+sha256sums=('SKIP' 'SKIP')
+
+package() {
+  install -d "${pkgdir}/usr/share/pacman/keyrings/"
+  install -m 0644 "${srcdir}/albanix.gpg" "${pkgdir}/usr/share/pacman/keyrings/albanix.gpg"
+  install -d "${pkgdir}/usr/share/pacman/keyrings/trusted"
+  install -m 0644 "${srcdir}/albanix-trusted" "${pkgdir}/usr/share/pacman/keyrings/trusted/albanix-trusted"
+}

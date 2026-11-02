@@ -1,0 +1,79 @@
+# starship.toml — Albanix OS prompt (Theme: Albanix Red by default)
+# Runs in the LIVE ISO and copied to installed users by Calamares.
+# The albanix-theme tool rewrites [character] colors when switching themes.
+
+format = """
+[★](bold #E41E20) \
+[⟪ directory ⟫](bold #F5F3EF) \
+[⟪ git_branch ⟫](bold #D4A537) \
+[⟪ git_status ⟫](red) \
+[⟪ nodejs ⟫](green) \
+[⟪ rust ⟫](red) \
+[⟪ python ⟫](yellow) \
+[⟪ package ⟫](red) \
+[⟪ duration ⟫](green) \
+[⟪ jobs ⟫](green) \
+[⟪ battery ⟫](green) \
+[⟪ time ⟫](yellow) \
+[⟪ character ⟫]
+"""
+
+# Directory truncation.
+[directory]
+truncation_length = 4
+truncate_to_repo = false
+format = "[$path](bold #F5F3EF) [$repository]($style)"
+style = "bold #F5F3EF"
+disabled = false
+
+# Git branch.
+[git_branch]
+symbol = " "
+style = "bold #D4A537"
+format = "on [$symbol$branch]($style) "
+
+# Git status.
+[git_status]
+conflicted = "= "
+ahead = "↑·"
+behind = "↓·"
+diverged = "↕·"
+untracked = "? "
+stashed = "$ "
+modified = "! "
+renamed = "» "
+deleted = "✘ "
+style = "bold #E41E20"
+
+# Character.
+[character]
+success_symbol = "[#E41E20 bold]▶[/#E41E20 bold]"
+error_symbol = "[#E41E20 bold]✗[/#E41E20 bold]"
+vicmd_symbol = "[#D4A537 bold]◀[/#D4A537 bold]"
+format = "$symbol "
+
+# Time: 24-hour (Albanian convention).
+[time]
+format = "[$time]($style)"
+time_format = "%H:%M"
+style = "bold #F5F3EF"
+
+# Battery.
+[battery]
+charging_symbol = "↑"
+discharging_symbol = "↓"
+display = ["battery"]
+format = "[$symbol$percentage]($style) "
+
+# Duration.
+[duration]
+format = "took [$duration]($style)"
+style = "green"
+
+# Disable modules we don't need by default.
+[hostname]
+disabled = true
+[username]
+disabled = true
+[scan_code]
+disabled = true

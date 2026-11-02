@@ -1,0 +1,307 @@
+#!/bin/bash
+# albanix-theme — Albanix OS theme switcher (CLI + settings tool backend)
+# Applies a theme atomically across the whole system:
+#   Plasma look-and-feel, color scheme, accent, icons, cursor, SDDM, Plymouth,
+#   bootloader theme, lock screen, wallpaper, Konsole, GTK/Qt, fastfetch, starship.
+# Idempotent and safe to re-run. Includes rollback if any step fails.
+#
+# Usage: albanix-theme <red|blue>          # switch theme
+#        albanix-theme --status             # show current theme
+#        albanix-theme --rollback            # restore previous theme
+#
+# Runs on the INSTALLED system (normal user; uses sudo where needed).
+set -uo pipefail
+
+THEME_DIR="/usr/share/albanix-themes"
+STATE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/albanix-theme"
+BACKUP_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/albanix-theme-backup"
+
+log() { printf '[albanix-theme] %s\n' "$*" >&2; }
+
+current_theme() {
+  if [[ -f "${STATE_FILE}" ]]; then cat "${STATE_FILE}"; else echo "red"; fi
+}
+
+save_theme() {
+  mkdir -p "$(dirname "${STATE_FILE}")"
+  echo "$1" > "${STATE_FILE}"
+}
+
+# --- Backup current config (for rollback) -----------------------------
+backup_config() {
+  local theme="$1"
+  mkdir -p "${BACKUP_DIR}"
+  local b="${BACKUP_DIR}/${theme}"
+  mkdir -p "${b}"
+
+  # Back up the files we're about to touch (only if they exist).
+  local files=(
+    "${HOME}/.config/kdeglobals"
+    "${HOME}/.config/plasmarc"
+    "${HOME}//.config/plasma-org.kde.plasma.desktop-appletsrc"
+    "${HOME}/.config/sddm.conf.d/*"
+    "${HOME}/.config/konsole/*"
+    "${HOME}/.config/fastfetch/*"
+    "${HOME}/.config/starship.toml"
+    "/etc/sddm.conf.d/albanix.conf"
+    "/etc/plymouth/plymouthd.conf"
+  )
+  for f in ${files[@]}; do
+    # shellcheck disable=SC2086
+    cp -r ${f} "${b}/" 2>/dev/null || true
+  done
+  # Remember which theme was active before this switch.
+  local prev
+  prev="$(current_theme)"
+  echo "${prev}" > "${BACKUP_DIR}/previous-theme"
+  log "Backup saved to ${BACKUP_DIR}"
+}
+
+# --- Rollback ---------------------------------------------------------
+do_rollback() {
+  local b="${BACKUP_DIR}/previous-theme"
+  local prev="red"
+  [[ -f "${b}" ]] && prev="$(cat "${b}")"
+  log "Rolling back to theme: ${prev}"
+  apply_theme "${prev}" "rollback"
+  echo "${prev}" > "${STATE_FILE}"
+  log "Rollback complete."
+}
+
+# --- Plasma look-and-feel --------------------------------------------
+apply_lookandfeel() {
+  local theme="$1"
+  local laf="org.albanix.${theme}"
+  log "Applying Plasma look-and-feel: ${laf}"
+  # lookandfeeltool applies the look-and-feel package (Plasma theme, colors, etc.)
+  lookandfeeltool apply "${laf}" 2>/dev/null || \
+    { log "WARNING: lookandfeeltool failed for ${laf}"; return 1; }
+  return 0
+}
+
+# --- Plasma color scheme ---------------------------------------------
+apply_colorscheme() {
+  local theme="$1"
+  log "Applying color scheme: Albanix ${theme}"
+  plasma-apply-colorscheme "Albanix${theme^}" 2>/dev/null || \
+    kwriteconfig6 --file kdeglobals --group General --key ColorScheme "Albanix${theme^}" 2>/dev/null || \
+    { log "WARNING: could not set color scheme"; return 1; }
+  return 0
+}
+
+# --- Plasma wallpaper (desktop + lock screen) ------------------------
+apply_wallpaper() {
+  local theme="$1"
+  local wp="/usr/share/wallpapers/Albanix-${theme^}/contents/images/3840x2160.svg"
+  log "Applying wallpaper: ${wp}"
+  plasma-apply-wallpaperimage "${wp}" 2>/dev/null || \
+    { log "WARNING: plasma-apply-wallpaperimage failed"; return 1; }
+  # Lock screen shares the same wallpaper via Plasma config.
+  kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc \
+    --group Containments --group 1 --group Wallpaper --group org.kde.plasma.folder \
+    --group WallpaperPlugin --key Image "file://${wp}" 2>/dev/null || true
+  return 0
+}
+
+# --- SDDM theme ------------------------------------------------------
+apply_sddm() {
+  local theme="$1"
+  log "Applying SDDM theme: albanix-${theme}"
+  sudo mkdir -p /etc/sddm.conf.d
+  # Point SDDM at the matching theme.
+  sudo kwriteconfig6 --file /etc/sddm.conf.d/albanix.conf --group Theme --key Current "albanix-${theme}" 2>/dev/null || \
+    sudo tee /etc/sddm.conf.d/albanix.conf >/dev/null <<EOF
+[Theme]
+Current=albanix-${theme}
+EOF
+  return 0
+}
+
+# --- Plymouth boot splash --------------------------------------------
+apply_plymouth() {
+  local theme="$1"
+  log "Applying Plymouth theme: albanix-${theme}"
+  sudo plymouth-set-default-theme "albanix-${theme}" 2>/dev/null || \
+    { log "WARNING: plymouth-set-default-theme failed"; return 1; }
+  sudo mkinitcpio -P 2>/dev/null || \
+    { log "WARNING: mkinitcpio -P failed (Plymouth may not appear in initramfs)"; }
+  return 0
+}
+
+# --- Bootloader theme ------------------------------------------------
+apply_bootloader() {
+  local theme="$1"
+  log "Applying bootloader theme: albanix-${theme}"
+  # systemd-boot entries are theme-agnostic; we set the splash via loader.conf
+  # and GRUB theme via grub-mkconfig if present.
+  if command -v grub-mkconfig >/dev/null 2>&1; then
+    sudo grub-mkconfig -o /boot/grub/grub.cfg 2>/dev/null || \
+      { log "WARNING: grub-mkconfig failed"; return 1; }
+  fi
+  return 0
+}
+
+# --- Konsole color scheme --------------------------------------------
+apply_konsole() {
+  local theme="$1"
+  log "Applying Konsole color scheme: Albanix ${theme}"
+  kwriteconfig6 --file konsolerc --group Desktop Entry --key DefaultProfile "Albanix${theme^}" 2>/dev/null || true
+  return 0
+}
+
+# --- GTK / Qt accents ------------------------------------------------
+apply_gtk_qt() {
+  local theme="$1"
+  local accent
+  if [[ "${theme}" == "red" ]]; then accent="#E41E20"; else accent="#244AA5"; fi
+  log "Applying GTK/Qt accent: ${accent}"
+  # Kvantum/Breeze accent via kdeglobals.
+  kwriteconfig6 --file kdeglobals --group General --key colorScheme "Albanix${theme^}" 2>/dev/null || true
+  # GTK settings.
+  mkdir -p "${HOME}/.config/gtk-3.0"
+  cat > "${HOME}/.config/gtk-3.0/settings.ini" <<EOF
+[Settings]
+gtk-theme-name=Breeze
+gtk-icon-theme-name=Breeze
+gtk-cursor-theme-name=Breeze
+gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ
+EOF
+  return 0
+}
+
+# --- fastfetch + starship per theme ----------------------------------
+apply_fastfetch_starship() {
+  local theme="$1"
+  log "Applying fastfetch + starship for theme: ${theme}"
+  local sep
+  if [[ "${theme}" == "red" ]]; then sep="#E41E20"; else sep="#244AA5"; fi
+
+  # fastfetch: point at albanix logo (colored by theme via config)
+  mkdir -p "${HOME}/.config/fastfetch"
+  cat > "${HOME}/.config/fastfetch/config.jsonc" <<EOF
+{
+  "logo": { "source": "albanix", "width": 45, "height": 22 },
+  "display": { "Separator": { "separatorCharacter": "─", "colons": "${theme}" } }
+}
+EOF
+
+  # starship: recolor the prompt symbol.
+  mkdir -p "${HOME}/.config"
+  if [[ "${theme}" == "red" ]]; then
+    cat > "${HOME}/.config/starship.toml" <<'TOML'
+format = """
+[★](bold #E41E20) \
+[⟪ directory ⟫](bold #F5F3EF) \
+[⟪ character ⟫]
+"""
+[character]
+success_symbol = "[#E41E20 bold]▶[/#E41E20 bold]"
+error_symbol = "[#E41E20 bold]✗[/#E41E20 bold]"
+[time]
+time_format = "%H:%M"
+style = "bold #F5F3EF"
+[directory]
+truncation_length = 4
+style = "bold #F5F3EF"
+TOML
+  else
+    cat > "${HOME}/.config/starship.toml" <<'TOML'
+format = """
+[★](bold #244AA5) \
+[⟪ directory ⟫](bold #FFFFFF) \
+[⟪ character ⟫]
+"""
+[character]
+success_symbol = "[#244AA5 bold]▶[/#244AA5 bold]"
+error_symbol = "[#244AA5 bold]✗[/#244AA5 bold]"
+[time]
+time_format = "%H:%M"
+style = "bold #FFFFFF"
+[directory]
+truncation_length = 4
+style = "bold #FFFFFF"
+TOML
+  fi
+  return 0
+}
+
+# --- Main apply (atomic with rollback) -------------------------------
+apply_theme() {
+  local theme="$1"
+  local mode="${2:-switch}"
+  local ok=0
+
+  if [[ "${theme}" != "red" && "${theme}" != "blue" ]]; then
+    log "ERROR: unknown theme '${theme}' (use red or blue)."
+    return 1
+  fi
+
+  if [[ "${mode}" == "switch" ]]; then
+    backup_config "${theme}"
+  fi
+
+  # Run all steps; track failures.
+  local steps=(
+    "apply_lookandfeel ${theme}"
+    "apply_colorscheme ${theme}"
+    "apply_wallpaper ${theme}"
+    "apply_sddm ${theme}"
+    "apply_plymouth ${theme}"
+    "apply_bootloader ${theme}"
+    "apply_konsole ${theme}"
+    "apply_gtk_qt ${theme}"
+    "apply_fastfetch_starship ${theme}"
+  )
+
+  for step in "${steps[@]}"; do
+    if ! eval "${step}"; then
+      log "FAILED step: ${step}"
+      ok=1
+      break
+    fi
+  done
+
+  if [[ "${ok}" -ne 0 ]]; then
+    log "One or more steps failed. Rolling back."
+    if [[ "${mode}" == "switch" ]]; then
+      do_rollback
+    fi
+    return 1
+  fi
+
+  save_theme "${theme}"
+  log "Theme '${theme}' applied successfully."
+  return 0
+}
+
+# --- status ----------------------------------------------------------
+do_status() {
+  echo "Current Albanix theme: $(current_theme)"
+}
+
+# --- main ------------------------------------------------------------
+main() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: albanix-theme <red|blue> | --status | --rollback"
+    exit 1
+  fi
+
+  case "$1" in
+    red|blue)
+      apply_theme "$1" "switch"
+      ;;
+    --status)
+      do_status
+      ;;
+    --rollback)
+      do_rollback
+      ;;
+    *)
+      echo "ERROR: unknown argument '$1'"
+      echo "Usage: albanix-theme <red|blue> | --status | --rollback"
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

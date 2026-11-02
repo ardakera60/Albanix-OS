@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Albanix Theme Switcher
+Name[sq]=Ndryshojësin e Temës Albanix
+GenericName=Switch Albanix OS theme
+GenericName[sq]=Ndryshoi temën e sistemit Albanix OS
+Comment=Switch between Albanix Red and Albanix Blue themes
+Comment[sq]=Ndrysho midis temave Albanix Red dhe Albanix Blue
+Exec=albanix-theme red
+Icon=albanix-logo
+Terminal=false
+Categories=System;Settings;
+Keywords=theme;plasma;sddm;plymouth;wallpaper;

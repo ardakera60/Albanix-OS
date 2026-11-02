@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix OS logo — original SVG drawing, geometric shield with stylized "A" -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E41E20"/>
+      <stop offset="100%" stop-color:#8A0F0F"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#244AA5"/>
+      <stop offset="100%" stop-color="#0E1A33"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shield (Red theme default) -->
+  <path d="M128 24 C96 24 70 44 56 72 C48 96 48 128 64 148 L128 220 L192 148 C208 128 208 96 200 72 C186 44 160 24 128 24 Z" fill="url(#redGrad)" stroke="#0B0B0F" stroke-width="4"/>
+
+  <!-- Stylized double-headed eagle mark (negative space) -->
+  <path d="M112 64 L128 88 L144 64 L128 76 Z" fill="#0B0B0F"/>
+  <path d="M104 96 L128 116 L152 96 L128 104 Z" fill="#0B0B0F"/>
+
+  <!-- Letter A -->
+  <path d="M120 156 L128 128 L136 156 Z M122 148 L134 148" fill="none" stroke="#F5F3EF" stroke-width="6" stroke-linecap="round"/>
+
+</svg>

@@ -1,0 +1,201 @@
+#!/usr/bin/env python3
+# albanix — Albanix OS command-line tool
+# Complete source. Runs on the INSTALLED system (normal user; uses sudo where needed).
+#
+# Commands:
+#   albanix update            full system update with notifications
+#   albanix clean             clean pacman cache + orphan removal
+#   albanix lang <sq|en>      switch system language
+#   albanix theme <red|blue>  switch theme
+#   albanix timesync          fix time sync (NTP)
+#   albanix snapshot list|create|restore <name>   Btrfs/Snapper snapshots
+#   albanix install-group <group>   install optional group (developer/gaming/creator/office/privacy)
+#   albanix bench             benchmark -> Markdown table
+#   albanix info              print system info for bug reports
+#
+# No telemetry. Nothing phones home except mirrors + NTP.
+import sys
+import os
+import subprocess
+import shutil
+import datetime
+
+SUDO = ["sudo"] if os.geteuid() != 0 else []
+
+def run(cmd, check=False):
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, check=check)
+        return p.returncode, p.stdout, p.stderr
+    except FileNotFoundError:
+        return 127, "", "command not found: " + (cmd[0] if cmd else "")
+
+def require_root():
+    if os.geteuid() != 0:
+        print("This command requires root. Re-run with sudo.", file=sys.stderr)
+        sys.exit(1)
+
+def cmd_update():
+    print("==> Updating package databases...")
+    rc, out, err = run(SUDO + ["pacman", "-Sy"])
+    print(out)
+    if rc != 0:
+        print(err, file=sys.stderr); sys.exit(1)
+    print("==> Checking for updates...")
+    rc, out, err = run(SUDO + ["pacman", "-Qu"])
+    if out.strip():
+        print(out)
+        print("==> Installing updates...")
+        rc, out, err = run(SUDO + ["pacman", "-Su", "--noconfirm"])
+        print(out)
+        if rc != 0:
+            print(err, file=sys.stderr); sys.exit(1)
+        print("==> Update complete.")
+    else:
+        print("==> System is up to date.")
+
+def cmd_clean():
+    print("==> Cleaning package cache...")
+    run(SUDO + ["pacman", "-Sc", "--noconfirm"])
+    print("==> Removing orphans...")
+    rc, out, err = run(SUDO + ["pacman", "-Qtdq"])
+    if out.strip():
+        run(SUDO + ["pacman", "-Rns", "--noconfirm"] + out.split())
+    print("==> Clean complete.")
+
+def cmd_lang(lang):
+    require_root()
+    if lang not in ("sq", "en"):
+        print("Usage: albanix lang <sq|en>", file=sys.stderr); sys.exit(1)
+    if lang == "sq":
+        lc = ("LANG=sq_AL.UTF-8\nLC_COLLATE=C\nLC_TIME=sq_AL.UTF-8\n"
+              "LC_NUMERIC=sq_AL.UTF-8\nLC_MONETARY=sq_AL.UTF-8\n"
+              "LC_PAPER=sq_AL.UTF-8\nLC_MEASUREMENT=sq_AL.UTF-8\n")
+        tz = "Europe/Tirane"
+    else:
+        lc = ("LANG=en_US.UTF-8\nLC_COLLATE=C\nLC_TIME=en_US.UTF-8\n"
+              "LC_NUMERIC=en_US.UTF-8\nLC_MONETARY=en_US.UTF-8\n"
+              "LC_PAPER=en_US.UTF-8\nLC_MEASUREMENT=en_US.UTF-8\n")
+        tz = "Europe/Tirane"
+    with open("/etc/locale.conf", "w") as f:
+        f.write(lc)
+    run(SUDO + ["locale-gen"])
+    run(SUDO + ["timedatectl", "set-timezone", tz])
+    run(SUDO + ["timedatectl", "set-ntp", "true"])
+    print(f"Language set to {lang} (timezone {tz}). Reboot or log out/in to apply.")
+
+def cmd_theme(theme):
+    if shutil.which("albanix-theme"):
+        rc, out, err = run(["albanix-theme", theme])
+        print(out)
+        if rc != 0:
+            print(err, file=sys.stderr); sys.exit(rc)
+    else:
+        print("albanix-theme not installed; install albanix-theme-switcher.", file=sys.stderr)
+        sys.exit(1)
+
+def cmd_timesync():
+    require_root()
+    run(SUDO + ["timedatectl", "set-ntp", "true"])
+    run(SUDO + ["timedatectl", "status"])
+    print("Time sync enabled.")
+
+def cmd_snapshot(action, name=None):
+    if shutil.which("snapper") is None:
+        print("snapper not installed.", file=sys.stderr); sys.exit(1)
+    if action == "list":
+        rc, out, err = run(SUDO + ["snapper", "-c", "albanix", "list"])
+        print(out)
+    elif action == "create":
+        desc = name or f"albanix-{datetime.datetime.now():%Y%m%d-%H%M%S}"
+        rc, out, err = run(SUDO + ["snapper", "-c", "albanix", "create",
+                                   "--description", desc])
+        print(out)
+        if rc != 0: sys.exit(rc)
+    elif action == "restore":
+        if not name:
+            print("Usage: albanix snapshot restore <number>", file=sys.stderr); sys.exit(1)
+        print(f"WARNING: restoring snapshot {name} reverts @ subvolume. Reboot required.")
+        run(SUDO + ["snapper", "-c", "albanix", "undo", str(name)])
+    else:
+        print("Usage: albanix snapshot list|create|restore <name>", file=sys.stderr); sys.exit(1)
+
+GROUPS = {
+    "developer": ["git", "nodejs", "pnpm", "python", "rustup", "docker", "podman", "code"],
+    "gaming":    ["steam", "proton-ge", "gamemode", "mangohud", "lutris"],
+    "creator":   ["obs-studio", "kdenlive", "krita", "gimp", "inkscape", "blender"],
+    "office":    ["libreoffice", "okular"],
+    "privacy":   ["wireguard-tools", "torbrowser-launcher"],
+}
+
+def cmd_install_group(group):
+    require_root()
+    group = group.lower()
+    if group not in GROUPS:
+        print(f"Unknown group '{group}'. Choices: {', '.join(GROUPS)}", file=sys.stderr)
+        sys.exit(1)
+    pkgs = GROUPS[group]
+    print(f"==> Installing {group} group: {', '.join(pkgs)}")
+    rc, out, err = run(SUDO + ["pacman", "-S", "--noconfirm", "--needed"] + pkgs)
+    print(out)
+    if rc != 0:
+        print(err, file=sys.stderr); sys.exit(1)
+    print(f"==> {group} group installed.")
+
+def cmd_bench():
+    if shutil.which("albanix-bench"):
+        run(["albanix-bench"])
+    else:
+        print("albanix-bench not installed; install albanix-bench.", file=sys.stderr)
+        sys.exit(1)
+
+def cmd_info():
+    print("=== Albanix OS system info ===")
+    run(["uname", "-a"])
+    print("--- /etc/os-release ---")
+    if os.path.exists("/etc/os-release"):
+        print(open("/etc/os-release").read())
+    print("--- locale ---")
+    run(["localectl", "status"])
+    print("--- time ---")
+    run(["timedatectl", "status"])
+    print("--- theme ---")
+    rc, out, err = run(["albanix-theme", "--status"]) if shutil.which("albanix-theme") else (0, "theme tool not installed\n", "")
+    print(out)
+    print("--- packages ---")
+    run(["pacman", "-Q", "|", "wc", "-l"], check=False)
+    print("--- disk ---")
+    run(["df", "-h", "/"])
+
+def main():
+    if len(sys.argv) < 2:
+        print("Albanix OS CLI")
+        print("Usage: albanix <update|clean|lang|theme|timesync|snapshot|install-group|bench|info> [args]")
+        sys.exit(1)
+
+    cmd = sys.argv[1].lower()
+    if cmd == "update":
+        cmd_update()
+    elif cmd == "clean":
+        cmd_clean()
+    elif cmd == "lang":
+        cmd_lang(sys.argv[2] if len(sys.argv) > 2 else "sq")
+    elif cmd == "theme":
+        cmd_theme(sys.argv[2] if len(sys.argv) > 2 else "red")
+    elif cmd == "timesync":
+        cmd_timesync()
+    elif cmd == "snapshot":
+        action = sys.argv[2] if len(sys.argv) > 2 else "list"
+        name = sys.argv[3] if len(sys.argv) > 3 else None
+        cmd_snapshot(action, name)
+    elif cmd == "install-group":
+        cmd_install_group(sys.argv[2] if len(sys.argv) > 2 else "developer")
+    elif cmd == "bench":
+        cmd_bench()
+    elif cmd == "info":
+        cmd_info()
+    else:
+        print(f"Unknown command: {cmd}", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,35 @@
+name: translation-check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    paths:
+      - 'po/**'
+      - 'calamares/**'
+      - 'scripts/**'
+      - 'packages/albanix-welcome/**'
+
+jobs:
+  check:
+    name: Albanian translation completeness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gettext
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gettext
+
+      - name: Check for untranslated Albanian strings
+        run: |
+          # Runs in CI; fails if any msgstr in po/sq/*.po is empty.
+          for po in po/sq/*.po; do
+            echo "Checking ${po} ..."
+            msgfmt -c -o /dev/null "${po}" || {
+              echo "ERROR: untranslated or malformed strings in ${po}"
+              exit 1
+            }
+          done
+          echo "All Albanian translations complete."

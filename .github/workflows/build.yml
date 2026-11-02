@@ -1,0 +1,44 @@
+name: build-iso
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Albanix OS ISO
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          pacman -Sy --needed --noconfirm \
+            archiso git gnupg squashfs-tools xorriso dosfstools devtools
+
+      - name: Import Albanix signing key (if ALBANIX_GPG_KEY set)
+        run: |
+          if [[ -n "${ALBANIX_GPG_KEY}" ]]; then
+            echo "${ALBANIX_GPG_KEY}" | gpg --import
+          fi
+        env:
+          ALBANIX_GPG_KEY: ${{ secrets.ALBANIX_GPG_KEY }}
+
+      - name: Build ISO
+        run: |
+          ./build.sh
+        env:
+          ALBANIX_GPG_KEY: ${{ secrets.ALBANIX_GPG_KEY }}
+
+      - name: Publish release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/albanix-os.iso
+            out/albanix-os.iso.sha256
+            out/albanix-os.iso.sig
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

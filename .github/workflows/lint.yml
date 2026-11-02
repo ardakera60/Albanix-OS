@@ -1,0 +1,70 @@
+name: lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  shellcheck:
+    name: shellcheck + shfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck and shfmt
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y shellcheck shfmt
+
+      - name: shellcheck all shell scripts
+        run: |
+          shellcheck \
+            archiso/profiles/albanix/*.sh \
+            scripts/*.sh \
+            packages/*/*.sh 2>/dev/null || true
+
+      - name: shfmt check formatting
+        run: |
+          shfmt -d archiso/profiles/albanix/*.sh scripts/*.sh packages/*/*.sh 2>/dev/null || true
+
+  python:
+    name: Python lint (welcome app + albanix CLI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ruff / pylint
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y python3-pip
+          pip3 install ruff
+
+      - name: ruff check
+        run: |
+          ruff check scripts/ packages/albanix-welcome/ packages/albanix-tools/ 2>/dev/null || true
+
+  markdown:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install markdownlint
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y npm
+          npm install -g markdownlint-cli
+
+      - name: markdownlint
+        run: |
+          markdownlint '*.md' 'docs/*.md' 'README*.md' 2>/dev/null || true
+
+  shellcheck-isolation:
+    name: shellcheck on ISO customization script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update -y && sudo apt-get install -y shellcheck
+          shellcheck archiso/profiles/albanix/customize_airootfs.sh

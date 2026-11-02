@@ -1,0 +1,261 @@
+# packages.x86_64 — Albanix OS live ISO + target system package list
+# Runs on the HOST (build machine). archiso installs every package here into
+# both the live environment and the installed target system.
+#
+# Groups:
+#   base        — Arch base + kernel + boot tooling
+#   kde         — Plasma 6 desktop and core apps
+#   network     — NetworkManager, bluez, cups, firewall
+#   drivers     — GPU drivers (mesa, nvidia-open, xf86-video-*, firmware)
+#   fonts       — Albanian-friendly fonts + emoji
+#   apps        — User applications (konsole, dolphin, ark, flatpak, discover…)
+#   dev         — Development tools
+#   multimedia  — Audio/video codecs and players
+#   gaming      — Steam, gaming utilities
+#   albanix     — Albanix own packages (branding, keyring, welcome, settings, themes)
+#   albanix-perf — CachyOS-inspired performance tooling
+#   locale      — Albanian locales, fonts, spellcheck
+
+###############################################################################
+# base
+###############################################################################
+base
+base-devel
+linux
+linux-firmware
+linux-lts              # fallback kernel entry on the boot menu
+btrfs-progs
+dosfstools
+efibootmgr
+grub                   # BIOS bootloader
+grub-btrfs             # bootable Btrfs snapshots (GRUB)
+intel-ucode            # Intel CPU microcode
+amd-ucode              # AMD CPU microcode
+mkinitcpio
+systemd-boot           # UEFI bootloader
+syslinux               # BIOS boot menu
+vim
+nano
+which
+curl
+wget
+rsync
+git
+gnupg
+openssh
+
+###############################################################################
+# kde — Plasma 6
+###############################################################################
+plasma
+plasma-desktop
+plasma-workspace
+sddm
+sddm-kcm
+konsole
+dolphin
+ark
+spectacle
+kate
+kcalc
+kdf
+systemsettings
+powerdevil
+kde-gtk-config
+kdeconnect
+xdg-desktop-portal-kde
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+networkmanager
+network-manager-applet
+bluez
+bluez-utils
+bluez-obex
+cups
+cups-pk-helper
+flatpak
+discover
+packagekit-qt5
+flatpak-kcm
+xdg-user-dirs
+xdg-utils
+qt6-wayland
+qt6-tools
+kvantum
+breeze
+breeze-gtk
+gtk3
+gtk4
+libadwaita
+
+###############################################################################
+# network / security
+###############################################################################
+ufw
+apparmor
+apparmor-profiles
+apparmor-parser
+audit
+haveged
+
+###############################################################################
+# drivers — GPU
+###############################################################################
+mesa
+mesa-utils
+vulkan-radeon
+vulkan-intel
+vulkan-mesa-layers
+vulkan-icd-loader
+libva-mesa-driver
+mesa-vdpau
+xf86-video-amdgpu
+xf86-video-intel
+xf86-video-nouveau
+nvidia-open-dkms         # auto-selected by installer for NVIDIA
+nvidia-utils
+nvidia-settings
+libnvidia-open
+egl-wayland
+wayland
+
+###############################################################################
+# drivers — input, wifi, bluetooth firmware
+###############################################################################
+libinput
+evdev-tools
+iwd
+wpa_supplicant
+wireless_tools
+linux-firmware-qlogic
+linux-firmware-marvell
+linux-firmware-network
+linux-firmware-nvidia
+linux-firmware-broadcom
+linux-firmware-realtek
+linux-firmware-ath
+linux-firmware-intel
+linux-firmware-media
+linux-firmware-zte
+
+###############################################################################
+# fonts — full Latin Extended coverage (Albanian ë, ç) + emoji
+###############################################################################
+noto-fonts
+noto-fonts-emoji
+noto-fonts-cjk           # fallback CJK coverage
+inter-font
+jetbrains-mono-nerd
+fira-code
+liberation-fonts
+dejavu-fonts
+cantarell-fonts
+
+###############################################################################
+# apps — office, graphics, system
+###############################################################################
+libreoffice-fresh
+okular
+gimp
+inkscape
+blender
+obs-studio
+kdenlive
+firefox
+thunderbird
+file-roller
+gparted
+bleachbit
+timeshift
+fastfetch
+htop
+btop
+neofetch
+p7zip
+unzip
+unrar
+ffmpeg
+ffmpegthumbnailer
+gst-plugins-good
+gst-plugins-bad
+gst-plugins-ugly
+gst-libav
+
+###############################################################################
+# dev — development
+###############################################################################
+git
+git-lfs
+nodejs
+pnpm
+python
+python-pip
+rustup
+docker
+podman
+code                    # VS Code OSS (community build)
+github-cli
+diffutils
+patch
+make
+cmake
+meson
+ninja
+valgrind
+gdb
+
+###############################################################################
+# multimedia
+###############################################################################
+vlc
+audacity
+lmms
+
+###############################################################################
+# gaming
+###############################################################################
+steam
+gamemode
+mangohud
+lutris
+wine
+wine-gecko
+wine-mono
+
+###############################################################################
+# albanix — Albanix own packages (built in packages/, added to [albanix] repo)
+###############################################################################
+albanix-keyring
+albanix-branding
+albanix-wallpapers
+albanix-welcome
+albanix-settings
+albanix-installer-config
+albanix-theme-red
+albanix-theme-blue
+albanix-theme-switcher
+albanix-tools
+albanix-bench
+
+###############################################################################
+# albanix-perf — CachyOS-inspired performance layer
+###############################################################################
+ananicy-cpp
+power-profiles-daemon
+thermald
+snapper
+snap-pac
+reflector
+reflector-timer
+systemd-oomd
+zram-generator
+
+###############################################################################
+# locale — Albanian
+###############################################################################
+hunspell-sq
+aspell-sq
+# kde-l10n-sq — Plasma Albanian translations (verify current Arch package name;
+# if not packaged, pull from KDE l10n-kf6 stable branch and build locally)

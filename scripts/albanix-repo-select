@@ -1,0 +1,95 @@
+#!/bin/bash
+# albanix-repo-select — CPU-tier optimized repository auto-selection
+# Detects x86-64 micro-architecture level (v1 / v3 / v4) and enables the
+# matching CachyOS optimized repo block in /etc/pacman.conf.
+#
+# TRUST MODEL (read before enabling):
+#   * Fast path: enables CachyOS repos (cachyos-v3 / cachyos-v4 / cachyos-x86-64).
+#     Requires trusting the CachyOS signing key F3B607488DB35A47 and their mirrors.
+#     Opt-in only — the generic x86-64 fallback (Arch official repos) is the default.
+#   * Self-built path: leave everything commented; build Albanix packages locally.
+#
+# Runs on the INSTALLED system (as root) or inside the CHROOT during install.
+set -euo pipefail
+
+PACMAN_CONF="${1:-/etc/pacman.conf}"
+CACHYOS_KEY="F3B607488DB35A47"
+MIRROR_BASE="https://mirror.cachyos.org/repo/x86_64/cachyos"
+
+log() { printf '[albanix-repo-select] %s\n' "$*" >&2; }
+
+# Detect supported x86-64 micro-architecture levels via ld.so.
+detect_level() {
+  # ld.so --help | grep "supported" lists x86-64-v2/v3/v4 if supported.
+  local out
+  out="$(ld.so --help 2>/dev/null | grep -oi 'x86-64-v[0-9]' || true)"
+  if echo "${out}" | grep -q 'x86-64-v4'; then
+    echo "v4"
+  elif echo "${out}" | grep -q 'x86-64-v3'; then
+    echo "v3"
+  elif echo "${out}" | grep -q 'x86-64-v2'; then
+    echo "v2"
+  else
+    echo "v1"
+  fi
+}
+
+enable_repo_block() {
+  local level="$1"
+  # Uncomment the matching [cachyos-*] block in pacman.conf.
+  case "${level}" in
+    v4)
+      log "Detected x86-64-v4: enabling [cachyos-v4]"
+      awk -v block="cachyos-v4" '
+        /^# \[cachyos-v4\]/ { found=1; print; next }
+        found && /^# / { print substr($0, 3); next }
+        found && !/^# / { found=0 }
+        { print }
+      ' "${PACMAN_CONF}" > "${PACMAN_CONF}.new" && mv "${PACMAN_CONF}.new" "${PACMAN_CONF}"
+      ;;
+    v3)
+      log "Detected x86-64-v3: enabling [cachyos-v3]"
+      awk -v block="cachyos-v3" '
+        /^# \[cachyos-v3\]/ { found=1; print; next }
+        found && /^# / { print substr($0, 3); next }
+        found && !/^# / { found=0 }
+        { print }
+      ' "${PACMAN_CONF}" > "${PACMAN_CONF}.new" && mv "${PACMAN_CONF}.new" "${PACMAN_CONF}"
+      ;;
+    *)
+      log "Detected x86-64-v1/v2 (generic): leaving optimized repos disabled."
+      log "Safe fallback: Arch official repositories only."
+      ;;
+  esac
+}
+
+import_cachyos_key() {
+  log "Importing CachyOS signing key ${CACHYOS_KEY} (fast path — trust required)"
+  pacman-key --recv-keys "${CACHYOS_KEY}" --keyserver keyserver.ubuntu.com 2>/dev/null \
+    || pacman-key --recv-keys "${CACHYOS_KEY}" --keyserver hkps://keyserver.ubuntu.com
+  pacman-key --lsign-key "${CACHYOS_KEY}"
+}
+
+main() {
+  if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
+    log "ERROR: must run as root."
+    exit 1
+  fi
+
+  local level
+  level="$(detect_level)"
+  log "CPU micro-architecture level: ${level}"
+
+  enable_repo_block "${level}"
+
+  if [[ "${level}" == "v3" || "${level}" == "v4" ]]; then
+    log "Optimized repo block uncommented. Review /etc/pacman.conf, then run:"
+    log "  sudo pacman-key --recv-keys ${CACHYOS_KEY} --keyserver keyserver.ubuntu.com"
+    log "  sudo pacman-key --lsign-key ${CACHYOS_KEY}"
+    log "  sudo pacman -Sy"
+  fi
+
+  log "Done."
+}
+
+main "$@"

@@ -1,0 +1,16 @@
+[Desktop Entry]
+X-Plasma-API=javascript
+X-Plasma-ContainmentLayout=org.albanix.blue
+X-KDE-PluginInfo-Author=Albanix OS project
+X-KDE-PluginInfo-Email=contact@albanix-os.example
+X-KDE-PluginInfo-Name=org.albanix.blue
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-Website=https://github.com/arda/albanix-os
+X-KDE-PluginInfo-License=GPL-3.0-or-later
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-Category=LookAndFeel
+Name=Albanix Blue
+Name[sq]=Albanix Blu
+Comment=Albanix OS Blue theme — navy and gold, Kosovo flag motif
+Comment[sq]=Tema e Blu e sistemit Albanix OS — navy dhe art, motivi i flamurit të Kosovës
+Icon=albanix-logo

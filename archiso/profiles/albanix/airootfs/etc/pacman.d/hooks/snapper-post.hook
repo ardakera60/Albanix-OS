@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Pacman operation completed; snapshot retained.
+When = PostTransaction
+Depends = snapper-pre.hook
+Exec = /bin/true

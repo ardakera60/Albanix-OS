@@ -1,0 +1,103 @@
+#!/bin/bash
+# albanix-bench — Albanix OS performance benchmark
+# Records boot time, idle RAM, a simple CPU test and a disk test, then prints
+# a Markdown table suitable for GitHub issues / README comparison.
+#
+# Runs on the INSTALLED system (normal user, some steps via sudo).
+set -euo pipefail
+
+OUT_FILE="${ALBANIX_BENCH_OUT:-/tmp/albanix-bench.md}"
+
+log() { printf '[albanix-bench] %s\n' "$*" >&2; }
+
+cmd_exists() { command -v "$1" >/dev/null 2>&1; }
+
+# --- Boot time ---------------------------------------------------------
+boot_time_s() {
+  if cmd_exists systemd-analyze; then
+    systemd-analyze | awk '/Startup finished/ {print $NF}' | tr -d 's'
+  else
+    echo "unknown"
+  fi
+}
+
+# --- Idle RAM (sample after 5s settle) ---------------------------------
+idle_ram_mb() {
+  sleep 5
+  free -m | awk '/^Mem:/ {print $3}'
+}
+
+# --- Simple CPU test: compress random data with zstd -------------------
+cpu_test_seconds() {
+  if ! cmd_exists zstd; then
+    echo "unknown (zstd missing)"
+    return
+  fi
+  local start end
+  start="$(date +%s.%N)"
+  head -c 200M /dev/urandom | zstd -q -T0 -c >/dev/null
+  end="$(date +%s.%N)"
+  awk "BEGIN {printf \"%.2f\", ${end} - ${start}}"
+}
+
+# --- Disk test: sequential write + read with dd ------------------------
+disk_test() {
+  local dir="${1:-/tmp/albanix-bench-disk}"
+  mkdir -p "${dir}"
+  local testfile="${dir}/benchfile"
+  local write_speed read_speed
+
+  write_speed="$(dd if=/dev/zero of="${testfile}" bs=1M count=1024 oflag=direct 2>&1 \
+    | awk '/copied/ {print $(NF-1), $NF}')"
+  read_speed="$(dd if="${testfile}" of=/dev/null bs=1M iflag=direct 2>&1 \
+    | awk '/copied/ {print $(NF-1), $NF}')"
+  rm -f "${testfile}"
+  echo "write: ${write_speed} | read: ${read_speed}"
+}
+
+# --- System info -------------------------------------------------------
+kernel_ver() { uname -r; }
+cpu_model() { awk -F': ' '/model name/ {print $2; exit}' /proc/cpuinfo; }
+ram_total() { free -g | awk '/^Mem:/ {print $2" GB"}'; }
+
+main() {
+  local bt ir cpu dt kv cm rt
+  bt="$(boot_time_s)"
+  ir="$(idle_ram_mb)"
+  cpu="$(cpu_test_seconds)"
+  dt="$(disk_test)"
+  kv="$(kernel_ver)"
+  cm="$(cpu_model)"
+  rt="$(ram_total)"
+
+  cat > "${OUT_FILE}" <<EOF
+# Albanix OS benchmark
+
+Generated: $(date -u +"%Y-%m-%d %H:%M UTC")
+Host: $(hostname)
+Kernel: ${kv}
+CPU: ${cm}
+RAM: ${rt}
+
+| Metric | Result |
+|--------|--------|
+| Boot time (systemd-analyze) | ${bt} s |
+| Idle RAM | ${ir} MB |
+| CPU test (200 MB zstd compress) | ${cpu} s |
+| Disk test | ${dt} |
+
+## Comparison template
+
+Copy this into a GitHub issue or README to compare Albanix OS vs stock Arch:
+
+| Distribution | Boot time | Idle RAM | CPU test | Disk read |
+|--------------|-----------|----------|----------|-----------|
+| Stock Arch   |           |          |          |           |
+| Albanix OS   | ${bt} s   | ${ir} MB | ${cpu} s | ${dt}     |
+
+EOF
+  log "Benchmark written to ${OUT_FILE}"
+  cat "${OUT_FILE}"
+}
+
+main "$@"

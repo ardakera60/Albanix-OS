@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix OS minimal geometric double-headed eagle mark — original SVG drawing -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="eagleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E41E20"/>
+      <stop offset="100%" stop-color="#8A0F0F"/>
+    </linearGradient>
+  </defs>
+  <!-- Left wing -->
+  <path d="M40 140 Q20 100 60 80 Q100 60 100 100 L40 140 Z" fill="url(#eagleGrad)"/>
+  <!-- Right wing (mirror) -->
+  <path d="M160 140 Q180 100 140 80 Q100 60 100 100 L160 140 Z" fill="url(#eagleGrad)"/>
+  <!-- Body -->
+  <path d="M90 100 Q100 80 110 100 Q100 120 90 100 Z" fill="#0B0B0F"/>
+  <!-- Two heads -->
+  <circle cx="70" cy="60" r="14" fill="url(#eagleGrad)"/>
+  <circle cx="130" cy="60" r="14" fill="url(#eagleGrad)"/>
+  <circle cx="70" cy="60" r="5" fill="#0B0B0F"/>
+  <circle cx="130" cy="60" r="5" fill="#0B0B0F"/>
+</svg>

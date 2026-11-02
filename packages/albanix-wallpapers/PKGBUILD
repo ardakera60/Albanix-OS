@@ -1,0 +1,45 @@
+# PKGBUILD — albanix-wallpapers
+# Albanix OS wallpapers: primary JPG wallpapers (Albania.svg / Kosovo.svg,
+# renamed to .jpg) for Red and Blue themes at 3840x2160, plus SVG fallbacks
+# at 2560x1600, 1920x1080, 1366x768, 3440x1440 and metadata.json.
+# Runs on the HOST (makepkg).
+pkgname=albanix-wallpapers
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Albanix OS wallpapers (JPG primary + SVG fallbacks for Red and Blue themes)"
+arch=('any')
+url="https://github.com/arda/albanix-os"
+license=('GPL-3.0-or-later')
+source=(
+  "../../themes/wallpapers/Albanix-Red/contents/images/3840x2160.jpg"
+  "../../themes/wallpapers/Albanix-Red/2560x1600.svg"
+  "../../themes/wallpapers/Albanix-Red/1920x1080.svg"
+  "../../themes/wallpapers/Albanix-Red/1366x768.svg"
+  "../../themes/wallpapers/Albanix-Red/3440x1440.svg"
+  "../../themes/wallpapers/Albanix-Red/metadata.json"
+  "../../themes/wallpapers/Albanix-Blue/contents/images/3840x2160.jpg"
+  "../../themes/wallpapers/Albanix-Blue/2560x1600.svg"
+  "../../themes/wallpapers/Albanix-Blue/1920x1080.svg"
+  "../../themes/wallpapers/Albanix-Blue/1366x768.svg"
+  "../../themes/wallpapers/Albanix-Blue/3440x1440.svg"
+  "../../themes/wallpapers/Albanix-Blue/metadata.json"
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  for theme in Red Blue; do
+    install -d "${pkgdir}/usr/share/wallpapers/Albanix-${theme}/contents/images"
+    # Install all images in the images subdirectory
+    for f in "${srcdir}/Albanix-${theme}/contents/images/"*; do
+      [[ -f "${f}" ]] && install -D -m 0644 "${f}" \
+        "${pkgdir}/usr/share/wallpapers/Albanix-${theme}/contents/images/$(basename "${f}")"
+    done
+    # Install loose SVG files (fallbacks at non-primary resolutions)
+    for f in "${srcdir}/Albanix-${theme}/"*.svg; do
+      [[ -f "${f}" ]] && install -D -m 0644 "${f}" \
+        "${pkgdir}/usr/share/wallpapers/Albanix-${theme}/contents/images/$(basename "${f}")"
+    done
+    install -D -m 0644 "${srcdir}/Albanix-${theme}/metadata.json" \
+      "${pkgdir}/usr/share/wallpapers/Albanix-${theme}/metadata.json"
+  done
+}

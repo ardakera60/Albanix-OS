@@ -1,0 +1,10 @@
+{
+  "name": "Albanix Red",
+  "description": "Albanix OS Red wallpaper — Albanian flag concept (red field, black double-headed eagle)",
+  "author": "Albanix OS project",
+  "license": "GPL-3.0-or-later",
+  "theme": "albanix-red",
+  "image-sizes": ["3840x2160", "2560x1600", "1920x1080", "1366x768", "3440x1440"],
+  "accent-color": "#E41E20",
+  "background-color": "#0B0B0F"
+}

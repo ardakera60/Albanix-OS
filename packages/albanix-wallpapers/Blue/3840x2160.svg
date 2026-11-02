@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix Blue wallpaper — Kosovo flag concept: blue field, gold map, six white stars. SVG fallback. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160">
+  <rect width="3840" height="2160" fill="#244AA5"/>
+  <!-- Gold map of Kosovo (simplified polygon, centered) -->
+  <polygon points="1720,860 1900,800 2060,880 2140,940 2120,1060 1980,1100 1820,1040 1700,960 1720,860" fill="#D0A650"/>
+  <!-- Six white stars in an arc above the map -->
+  <g transform="translate(1920, 820)">
+    <circle cx="-150" cy="0" r="22" fill="#FFFFFF"/>
+    <circle cx="-90" cy="-18" r="22" fill="#FFFFFF"/>
+    <circle cx="-30" cy="-24" r="22" fill="#FFFFFF"/>
+    <circle cx="30" cy="-24" r="22" fill="#FFFFFF"/>
+    <circle cx="90" cy="-18" r="22" fill="#FFFFFF"/>
+    <circle cx="150" cy="0" r="22" fill="#FFFFFF"/>
+  </g>
+</svg>

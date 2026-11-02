@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix Red wallpaper — Albanian flag concept: red field, black double-headed eagle. SVG fallback. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160">
+  <rect width="3840" height="2160" fill="#E41E20"/>
+  <!-- Black double-headed eagle (geometric, centered) -->
+  <g transform="translate(1920, 1080) scale(2.6)">
+    <!-- Left wing -->
+    <path d="M-260 320 Q-340 200 -220 120 Q0 100 0 160 L-260 320 Z" fill="#0B0B0F"/>
+    <!-- Right wing -->
+    <path d="M260 320 Q340 200 220 120 Q0 100 0 160 L260 320 Z" fill="#0B0B0F"/>
+    <!-- Body -->
+    <path d="M-70 160 Q0 120 70 160 Q0 200 -70 160 Z" fill="#0B0B0F"/>
+    <!-- Heads -->
+    <circle cx="-120" cy="100" r="44" fill="#0B0B0F"/>
+    <circle cx="120" cy="100" r="44" fill="#0B0B0F"/>
+    <circle cx="-120" cy="100" r="16" fill="#E41E20"/>
+    <circle cx="120" cy="100" r="16" fill="#E41E20"/>
+  </g>
+</svg>

@@ -17,7 +17,7 @@ jobs:
       - name: Install build dependencies
         run: |
           pacman -Sy --needed --noconfirm \
-            archiso git gnupg squashfs-tools xorriso dosfstools devtools
+            base-devel archiso git gnupg
 
       - name: Import Albanix signing key (if ALBANIX_GPG_KEY set)
         run: |

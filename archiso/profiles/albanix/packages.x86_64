@@ -32,7 +32,6 @@ grub-btrfs             # bootable Btrfs snapshots (GRUB)
 intel-ucode            # Intel CPU microcode
 amd-ucode              # AMD CPU microcode
 mkinitcpio
-systemd-boot           # UEFI bootloader
 syslinux               # BIOS boot menu
 vim
 nano
@@ -47,7 +46,7 @@ openssh
 ###############################################################################
 # kde — Plasma 6
 ###############################################################################
-plasma
+plasma-meta
 plasma-desktop
 plasma-workspace
 sddm
@@ -77,7 +76,7 @@ cups
 cups-pk-helper
 flatpak
 discover
-packagekit-qt5
+packagekit-qt6
 flatpak-kcm
 xdg-user-dirs
 xdg-utils
@@ -95,8 +94,6 @@ libadwaita
 ###############################################################################
 ufw
 apparmor
-apparmor-profiles
-apparmor-parser
 audit
 haveged
 
@@ -109,15 +106,12 @@ vulkan-radeon
 vulkan-intel
 vulkan-mesa-layers
 vulkan-icd-loader
-libva-mesa-driver
-mesa-vdpau
 xf86-video-amdgpu
 xf86-video-intel
 xf86-video-nouveau
 nvidia-open-dkms         # auto-selected by installer for NVIDIA
 nvidia-utils
 nvidia-settings
-libnvidia-open
 egl-wayland
 wayland
 
@@ -125,20 +119,18 @@ wayland
 # drivers — input, wifi, bluetooth firmware
 ###############################################################################
 libinput
-evdev-tools
 iwd
 wpa_supplicant
 wireless_tools
 linux-firmware-qlogic
 linux-firmware-marvell
-linux-firmware-network
+linux-firmware-mediatek
 linux-firmware-nvidia
 linux-firmware-broadcom
 linux-firmware-realtek
-linux-firmware-ath
+linux-firmware-atheros
 linux-firmware-intel
-linux-firmware-media
-linux-firmware-zte
+linux-firmware-other
 
 ###############################################################################
 # fonts — full Latin Extended coverage (Albanian ë, ç) + emoji
@@ -147,10 +139,10 @@ noto-fonts
 noto-fonts-emoji
 noto-fonts-cjk           # fallback CJK coverage
 inter-font
-jetbrains-mono-nerd
-fira-code
-liberation-fonts
-dejavu-fonts
+ttf-jetbrains-mono-nerd
+ttf-fira-code
+ttf-liberation
+ttf-dejavu
 cantarell-fonts
 
 ###############################################################################
@@ -172,8 +164,7 @@ timeshift
 fastfetch
 htop
 btop
-neofetch
-p7zip
+zip
 unzip
 unrar
 ffmpeg
@@ -195,7 +186,7 @@ python-pip
 rustup
 docker
 podman
-code                    # VS Code OSS (community build)
+# code — VS Code OSS is not in official repos (AUR: code). Ships kate + git instead.
 github-cli
 diffutils
 patch
@@ -248,14 +239,9 @@ thermald
 snapper
 snap-pac
 reflector
-reflector-timer
-systemd-oomd
 zram-generator
 
-###############################################################################
-# locale — Albanian
-###############################################################################
-hunspell-sq
-aspell-sq
-# kde-l10n-sq — Plasma Albanian translations (verify current Arch package name;
-# if not packaged, pull from KDE l10n-kf6 stable branch and build locally)
+# NOTE: hunspell-sq / aspell-sq / kde-l10n-sq do NOT exist in Arch repos yet.
+# They are built from KDE/Fedora sources in a later phase; removed here so the
+# ISO build never fails. Track Albanian language packs in a follow-up release.
+

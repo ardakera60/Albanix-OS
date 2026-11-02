@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Albanix Blue
+Description=Albanix OS Blue boot splash — navy and gold, Kosovo flag motif
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/albanix-blue
+ScriptFile=/usr/share/plymouth/themes/albanix-blue/albanix-blue.script

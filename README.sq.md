@@ -5,7 +5,7 @@ ISO live i bootuesh (UEFI + BIOS) me instalues grafik Calamares, parsimin e perf
 i inspiruar nga CachyOS, dy tema të plotë sisteme (Albanix Red / Albanix Blue) dhe
 lokalizim të plotë shqip (Shqip) dhe angjlisht.
 
-![Logo i Albanix OS](docs/assets/logo.svg)
+![Logo i Albanix OS](themes/assets/logo-official.png)
 
 ## Statusi
 

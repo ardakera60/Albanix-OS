@@ -1,0 +1,7 @@
+// albanix-blue.script — Plymouth boot splash script (Albanix Blue)
+// Runs in the initramfs at boot.
+
+background_color = { 0.03, 0.06, 0.12 }; // #07101F approximately
+
+background = Pylon.Texture("background.png");
+Pylon.AddImage(background, 0, 0);

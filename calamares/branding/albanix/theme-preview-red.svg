@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Calamares theme preview — Albanix Red -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  <rect width="240" height="160" fill="#E41E20"/>
+  <g transform="translate(120,80) scale(0.55)">
+    <path d="M-120 100 Q-170 70 -120 40 Q0 25 0 60 L-120 100 Z" fill="#0B0B0F"/>
+    <path d="M120 100 Q170 70 120 40 Q0 25 0 60 L120 100 Z" fill="#0B0B0F"/>
+    <path d="M-30 60 Q0 40 30 60 Q0 80 -30 60 Z" fill="#0B0B0F"/>
+    <circle cx="-48" cy="35" r="20" fill="#0B0B0F"/>
+    <circle cx="48" cy="35" r="20" fill="#0B0B0F"/>
+    <circle cx="-48" cy="35" r="7" fill="#E41E20"/>
+    <circle cx="48" cy="35" r="7" fill="#E41E20"/>
+  </g>
+  <rect x="16" y="128" width="130" height="8" rx="4" fill="#F5F3EF" opacity="0.65"/>
+  <rect x="16" y="140" width="90" height="6" rx="3" fill="#D4A537" opacity="0.55"/>
+</svg>

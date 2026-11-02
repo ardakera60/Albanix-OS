@@ -5,6 +5,7 @@
 # version, architecture and the pacman.conf to use for building the live root.
 
 profile_name="albanix"
+iso_name="albanix-os"
 iso_label="ALBANIX_OS_$(date +%Y%m%d)"
 iso_publisher="Albanix OS <https://github.com/arda/albanix-os>"
 iso_application="Albanix OS live / installation medium"

@@ -1,0 +1,12 @@
+# udev I/O scheduler rules — Albanix OS (CachyOS-inspired)
+# none for NVMe, mq-deadline for SATA SSD, bfq for HDD.
+# Matches by device type so it applies at boot and on hotplug.
+
+# NVMe -> none (best for NVMe SSDs)
+ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+
+# SATA SSD -> mq-deadline (rotating=0)
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+# HDD -> bfq (rotating=1)
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"

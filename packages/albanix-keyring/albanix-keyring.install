@@ -1,0 +1,4 @@
+post_install() {
+  echo "albanix-keyring: placeholder (no repo key published yet)."
+  echo "See docs/repo-hosting.md for GPG signing ceremony."
+}

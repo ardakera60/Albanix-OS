@@ -11,18 +11,18 @@ arch=('any')
 url="https://github.com/arda/albanix-os"
 license=('GPL-3.0-or-later')
 source=(
-  "../../themes/wallpapers/Albanix-Red/contents/images/3840x2160.jpg"
-  "../../themes/wallpapers/Albanix-Red/2560x1600.svg"
-  "../../themes/wallpapers/Albanix-Red/1920x1080.svg"
-  "../../themes/wallpapers/Albanix-Red/1366x768.svg"
-  "../../themes/wallpapers/Albanix-Red/3440x1440.svg"
-  "../../themes/wallpapers/Albanix-Red/metadata.json"
-  "../../themes/wallpapers/Albanix-Blue/contents/images/3840x2160.jpg"
-  "../../themes/wallpapers/Albanix-Blue/2560x1600.svg"
-  "../../themes/wallpapers/Albanix-Blue/1920x1080.svg"
-  "../../themes/wallpapers/Albanix-Blue/1366x768.svg"
-  "../../themes/wallpapers/Albanix-Blue/3440x1440.svg"
-  "../../themes/wallpapers/Albanix-Blue/metadata.json"
+  "Albanix-Red/contents/images/3840x2160.jpg"
+  "Albanix-Red/2560x1600.svg"
+  "Albanix-Red/1920x1080.svg"
+  "Albanix-Red/1366x768.svg"
+  "Albanix-Red/3440x1440.svg"
+  "Albanix-Red/metadata.json"
+  "Albanix-Blue/contents/images/3840x2160.jpg"
+  "Albanix-Blue/2560x1600.svg"
+  "Albanix-Blue/1920x1080.svg"
+  "Albanix-Blue/1366x768.svg"
+  "Albanix-Blue/3440x1440.svg"
+  "Albanix-Blue/metadata.json"
 )
 sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 

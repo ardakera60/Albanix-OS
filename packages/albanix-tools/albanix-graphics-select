@@ -1,0 +1,76 @@
+#!/bin/bash
+# albanix-graphics-select — auto-detect GPU and install/configure drivers
+# Detects NVIDIA / AMD / Intel / hybrid and writes the right config.
+# Runs on the INSTALLED system (as root) during Calamares shellprocess or manually.
+set -euo pipefail
+
+log() { printf '[albanix-graphics-select] %s\n' "$*" >&2; }
+
+has_pci() { lspci -nnk | grep -qi "$1"; }
+
+detect_gpu() {
+  if has_pci 'VGA.*NVIDIA\|3D.*NVIDIA'; then echo "nvidia"; return; fi
+  if has_pci 'VGA.*AMD\|3D.*AMD\|VGA.*ATI\|3D.*ATI'; then echo "amd"; return; fi
+  if has_pci 'VGA.*Intel\|3D.*Intel'; then echo "intel"; return; fi
+  echo "unknown"
+}
+
+# Hybrid detection: both Intel and AMD/NVIDIA present.
+is_hybrid() {
+  local count=0
+  has_pci 'VGA' && count=$((count+1)) || true
+  # Simpler heuristic: more than one VGA/3D controller.
+  local n
+  n="$(lspci -nn | grep -Ei 'VGA|3D' | wc -l)"
+  [[ "${n}" -gt 1 ]]
+}
+
+apply_nvidia() {
+  log "NVIDIA detected: enabling Wayland-safe NVIDIA config"
+  # nvidia-drm.modeset=1 required for Wayland.
+  mkdir -p /etc/modprobe.d
+  cat > /etc/modprobe.d/nvidia.conf <<'EOF'
+options nvidia-drm modeset=1
+EOF
+  # Enable nvidia suspend/resume services if present.
+  systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service 2>/dev/null || true
+  # PRIME offload note: nvidia-offload wrapper provided by nvidia-utils.
+  log "NVIDIA configured. Reboot recommended."
+}
+
+apply_amd() {
+  log "AMD GPU detected: mesa + amdgpu driver (already installed on ISO)."
+  log "No additional config required."
+}
+
+apply_intel() {
+  log "Intel GPU detected: mesa + i915/xe driver (already installed on ISO)."
+  log "No additional config required."
+}
+
+main() {
+  if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
+    log "ERROR: must run as root."
+    exit 1
+  fi
+
+  local gpu
+  gpu="$(detect_gpu)"
+  log "Detected GPU class: ${gpu}"
+
+  case "${gpu}" in
+    nvidia) apply_nvidia ;;
+    amd)    apply_amd ;;
+    intel)  apply_intel ;;
+    *)      log "Unknown GPU: leaving default mesa drivers." ;;
+  esac
+
+  if is_hybrid; then
+    log "Hybrid graphics detected: PRIME offload available."
+    log "Use: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia <app>"
+  fi
+
+  log "Done. Reboot to apply kernel module changes."
+}
+
+main "$@"

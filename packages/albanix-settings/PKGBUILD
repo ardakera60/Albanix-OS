@@ -13,8 +13,8 @@ depends=('systemd' 'zram-generator' 'ananicy-cpp' 'power-profiles-daemon'
          'thermald' 'ufw' 'apparmor' 'reflector')
 source=(
   "99-albanix-performance.conf"
-  "albanix.conf::zram-generator.conf"
-  "albanix.rules::ananicy.rules"
+  "albanix.conf"
+  "albanix.rules"
   "power-profiles-daemon.config"
   "thermald.conf"
   "60-albanix-iosched.rules"
@@ -30,12 +30,12 @@ package() {
 
   # zram
   install -d "${pkgdir}/etc/systemd/zram-generator.conf.d"
-  install -D -m 0644 "${srcdir}/albanix.conf::zram-generator.conf" \
+  install -D -m 0644 "${srcdir}/albanix.conf" \
     "${pkgdir}/etc/systemd/zram-generator.conf.d/albanix.conf"
 
   # ananicy-cpp rules
   install -d "${pkgdir}/etc/ananicy.d"
-  install -D -m 0644 "${srcdir}/albanix.rules::ananicy.rules" \
+  install -D -m 0644 "${srcdir}/albanix.rules" \
     "${pkgdir}/etc/ananicy.d/albanix.rules"
 
   # power-profiles-daemon

@@ -36,7 +36,7 @@ cp "$T/assets/logo-albanix.svg" \
 # ---------------------------------------------------------------- wallpapers
 # stage files into $P/albanix-wallpapers/Albanix-{Red,Blue} matching the
 # PKGBUILD source layout
-for side in red Red blue Blue; do
+for side in "red Red" "blue Blue"; do
   set -- $side
   src="$T/wallpapers/Albanix-$2"
   dst="$P/albanix-wallpapers/Albanix-$2"

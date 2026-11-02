@@ -1,0 +1,10 @@
+{
+  "name": "Albanix Blue",
+  "description": "Albanix OS Blue wallpaper — Kosovo flag concept (blue field, gold map, six white stars)",
+  "author": "Albanix OS project",
+  "license": "GPL-3.0-or-later",
+  "theme": "albanix-blue",
+  "image-sizes": ["3840x2160", "2560x1600", "1920x1080", "1366x768", "3440x1440"],
+  "accent-color": "#244AA5",
+  "background-color": "#07101F"
+}

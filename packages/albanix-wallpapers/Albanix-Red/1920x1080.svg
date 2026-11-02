@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix Red wallpaper — Albanian flag concept (1920x1080). SVG fallback. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#E41E20"/>
+  <g transform="translate(960, 540) scale(1.8)">
+    <path d="M-170 170 Q-230 110 -140 65 Q0 55 0 90 L-170 170 Z" fill="#0B0B0F"/>
+    <path d="M170 170 Q230 110 140 65 Q0 55 0 90 L170 170 Z" fill="#0B0B0F"/>
+    <path d="M-42 90 Q0 65 42 90 Q0 115 -42 90 Z" fill="#0B0B0F"/>
+    <circle cx="-68" cy="55" r="28" fill="#0B0B0F"/>
+    <circle cx="68" cy="55" r="28" fill="#0B0B0F"/>
+    <circle cx="-68" cy="55" r="10" fill="#E41E20"/>
+    <circle cx="68" cy="55" r="10" fill="#E41E20"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Albanix Blue wallpaper — Kosovo flag concept (1366x768). SVG fallback. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1366 768">
+  <rect width="1366" height="768" fill="#244AA5"/>
+  <polygon points="611,305 675,282 732,311 760,332 752,374 703,388 646,367 604,339 611,305" fill="#D0A650"/>
+  <g transform="translate(683, 290)">
+    <circle cx="-48" cy="0" r="8" fill="#FFFFFF"/>
+    <circle cx="-28" cy="-7" r="8" fill="#FFFFFF"/>
+    <circle cx="-9" cy="-8" r="8" fill="#FFFFFF"/>
+    <circle cx="9" cy="-8" r="8" fill="#FFFFFF"/>
+    <circle cx="28" cy="-7" r="8" fill="#FFFFFF"/>
+    <circle cx="48" cy="0" r="8" fill="#FFFFFF"/>
+  </g>
+</svg>

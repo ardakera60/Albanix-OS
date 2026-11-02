@@ -75,7 +75,7 @@ setup_local_repo() {
   log "Setting up local [albanix] repository"
   (
     cd "${WORK_DIR}/repo/x86_64"
-    repo-add --nosign albanix.db.tar.zst ./*.pkg.tar.zst
+    repo-add albanix.db.tar.zst ./*.pkg.tar.zst
   )
   cat > "${WORK_DIR}/repo/albanix.repo" <<EOF
 [albanix]

@@ -1,0 +1,63 @@
+# ananicy-cpp rules — Albanix OS
+# Process nicing / I/O class rules for common desktop workloads.
+# Runs via ananicy-cpp service (enabled in customize_airootfs.sh).
+
+# Give browsers lower CPU priority so they don't starve the desktop.
+[process]
+name = "firefox"
+nice = 5
+ionice = "best-effort"
+class = "idle"
+
+[process]
+name = "thunderbird"
+nice = 5
+ionice = "best-effort"
+
+# Compilers / build tools: let them use spare CPU but stay nice to UI.
+[process]
+name = "cargo"
+nice = 5
+[process]
+name = "rustc"
+nice = 5
+[process]
+name = "make"
+nice = 5
+[process]
+name = "gcc"
+nice = 5
+[process]
+name = "clang"
+nice = 5
+[process]
+name = "cc1"
+nice = 5
+
+# Games and gaming tools: higher priority for smooth frame delivery.
+[process]
+name = "steam"
+nice = -5
+ionice = "real-time"
+[process]
+name = "gamescope"
+nice = -8
+ionice = "real-time"
+[process]
+name = "mangohud"
+nice = -5
+
+# Media creation: high priority while rendering/encoding.
+[process]
+name = "obs"
+nice = -4
+[process]
+name = "blender"
+nice = -4
+[process]
+name = "kdenlive"
+nice = -4
+[process]
+name = "ffmpeg"
+nice = -4
+ionice = "best-effort"

@@ -48,8 +48,8 @@ done
 
 # ---------------------------------------------------------------- settings
 cp "$A/sysctl.d/99-albanix-performance.conf"              "$P/albanix-settings/99-albanix-performance.conf"
-cp "$A/systemd/zram-generator.conf.d/albanix.conf"        "$P/albanix-settings/zram-generator-albanix.conf"
-cp "$A/ananicy.d/albanix.rules"                            "$P/albanix-settings/ananicy.rules"
+cp "$A/systemd/zram-generator.conf.d/albanix.conf"        "$P/albanix-settings/albanix.conf"
+cp "$A/ananicy.d/albanix.rules"                            "$P/albanix-settings/albanix.rules"
 cp "$A/power-profiles-daemon.config"                      "$P/albanix-settings/power-profiles-daemon.config"
 cp "$A/thermald/thermald.conf"                            "$P/albanix-settings/thermald.conf"
 cp "$A/udev/rules.d/60-albanix-iosched.rules"             "$P/albanix-settings/60-albanix-iosched.rules"

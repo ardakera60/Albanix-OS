@@ -15,10 +15,8 @@ source=(
   "org.albanix.blue.layout.js"
   "Albanix-Blue-dark.colors"
   "Albanix-Blue-light.colors"
-  "sddm-albanix-blue"
-  "plymouth-albanix-blue"
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 package() {
   install -d "${pkgdir}/usr/share/plasma/look-and-feel/org.albanix.blue/contents"
@@ -34,8 +32,8 @@ package() {
     "${pkgdir}/usr/share/color-schemes/AlbanixBlue-light.colors"
 
   install -d "${pkgdir}/usr/share/sddm/themes/albanix-blue"
-  cp -r "${srcdir}/sddm-albanix-blue/." "${pkgdir}/usr/share/sddm/themes/albanix-blue/"
+  cp -r "${startdir}/sddm-albanix-blue/." "${pkgdir}/usr/share/sddm/themes/albanix-blue/"
 
   install -d "${pkgdir}/usr/share/plymouth/themes/albanix-blue"
-  cp -r "${srcdir}/plymouth-albanix-blue/." "${pkgdir}/usr/share/plymouth/themes/albanix-blue/"
+  cp -r "${startdir}/plymouth-albanix-blue/." "${pkgdir}/usr/share/plymouth/themes/albanix-blue/"
 }

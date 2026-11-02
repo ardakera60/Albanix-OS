@@ -15,10 +15,8 @@ source=(
   "org.albanix.red.layout.js"
   "Albanix-Red-dark.colors"
   "Albanix-Red-light.colors"
-  "sddm-albanix-red"
-  "plymouth-albanix-red"
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 package() {
   # Plasma look-and-feel
@@ -37,9 +35,9 @@ package() {
 
   # SDDM theme
   install -d "${pkgdir}/usr/share/sddm/themes/albanix-red"
-  cp -r "${srcdir}/sddm-albanix-red/." "${pkgdir}/usr/share/sddm/themes/albanix-red/"
+  cp -r "${startdir}/sddm-albanix-red/." "${pkgdir}/usr/share/sddm/themes/albanix-red/"
 
   # Plymouth theme
   install -d "${pkgdir}/usr/share/plymouth/themes/albanix-red"
-  cp -r "${srcdir}/plymouth-albanix-red/." "${pkgdir}/usr/share/plymouth/themes/albanix-red/"
+  cp -r "${startdir}/plymouth-albanix-red/." "${pkgdir}/usr/share/plymouth/themes/albanix-red/"
 }
